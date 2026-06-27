@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-cli_commands.py - all --flag command implementations for the tempmail.py CLI.
+cli_commands.py - all --flag command implementations for the unimail.py CLI.
 """
 
 import sys, re, textwrap, html
@@ -19,7 +19,7 @@ from cli_maildax import maildax_fetch_csrf
 def cmd_help():
     print(f"""
 {c('bold',c('cyan','╔══════════════════════════════════════════════════════╗'))}
-{c('bold',c('cyan','║          TempMail CLI  ·  Single-Line Commands       ║'))}
+{c('bold',c('cyan','║          UniMail CLI  ·  Single-Line Commands        ║'))}
 {c('bold',c('cyan','╚══════════════════════════════════════════════════════╝'))}
 
 {c('bold','INFO')}

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-cli_maildax.py - maildax.cc client logic for the tempmail.py CLI.
+cli_maildax.py - maildax.cc client logic for the unimail.py CLI.
 (Placeholder — full command wiring deferred, same as original.)
 """
 

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
 cli_config.py - shared config, ANSI helpers, cache I/O, and email parsing
-for the tempmail.py CLI.
+for the unimail.py CLI.
 
-Split out of the original monolithic tempmail.py so each concern
+Split out of the original monolithic unimail.py so each concern
 (config/ansi/cache, tempmailq client, maildax client, commands, entry point)
 can be edited independently.
 """
@@ -12,11 +12,11 @@ import sys, os, json, time
 
 # ── Config ────────────────────────────────────────────────────────────────────
 
-CACHE_FILE   = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".tempmail_cache.json")
+CACHE_FILE   = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".unimail_cache.json")
 IMPERSONATE  = "chrome124"
 HTTP_TIMEOUT = 20
 
-DEBUG = os.environ.get("TEMPMAIL_DEBUG", "0") == "1"
+DEBUG = os.environ.get("UNIMAIL_DEBUG", "0") == "1"
 
 def set_debug(value: bool):
     """Toggle debug output at runtime (used by --debug CLI flag)."""

@@ -14,7 +14,7 @@ debug_*.txt
 err.txt
 
 # Local cache / state
-.tempmail_cache.json
+.unimail_cache.json
 
 # Env / secrets
 .env

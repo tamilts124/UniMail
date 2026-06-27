@@ -22,7 +22,7 @@ def header(site):
     email = site.current_email or "..."
     console.print(Panel(
         f"[bold white]{email}[/]  [dim]| tempmailq.com[/]",
-        title="[bold cyan]TempMail[/]",
+        title="[bold cyan]UniMail[/]",
         border_style="cyan",
         padding=(0, 2),
     ))

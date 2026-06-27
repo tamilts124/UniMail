@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-cli_tmq.py - tempmailq.com client logic for the tempmail.py CLI.
+cli_tmq.py - tempmailq.com client logic for the unimail.py CLI.
 
 CSRF PROTOCOL (tempmailq.com) — confirmed from HAR 2026-06-27:
   Laravel uses TWO separate CSRF mechanisms simultaneously:
@@ -22,7 +22,7 @@ SESSION MODEL:
   Each email address owns its own independent curl_cffi Session with its
   own laravel_session + XSRF-TOKEN cookies + meta_token. Multiple mailboxes
   can be used simultaneously in the same process without interference.
-  Per-mailbox state is persisted to .tempmail_cache.json.
+  Per-mailbox state is persisted to .unimail_cache.json.
 """
 
 import re, time, urllib.parse

@@ -1,13 +1,12 @@
-# TempMail CLI
+# UniMail
 
-A Python toolkit for creating and managing disposable email addresses via two
-temp-mail providers: **tempmailq.com** and **maildax.cc**. Comes with two
-interfaces — a flag-driven CLI and an interactive TUI — both built on
+A unified CLI and TUI for disposable email — one consistent interface across
+multiple temp-mail providers (tempmailq.com, maildax.cc, and more). Built on
 `curl_cffi` browser-impersonation sessions so requests aren't fingerprint-blocked.
 
 ## Features
 
-- Create, switch, and delete disposable mailboxes
+- Create, switch, and delete disposable mailboxes across providers
 - List and read inbox messages (HTML bodies are cleaned up into readable text)
 - Per-mailbox session persistence (cookies + CSRF tokens cached to disk, so
   you don't have to re-create a mailbox every run)
@@ -30,7 +29,7 @@ pip install curl_cffi rich beautifulsoup4
 
 ```
 tempmail/
-├── tempmail.py          # CLI entry point
+├── unimail.py           # CLI entry point
 ├── cli_config.py        # shared config, ANSI colors, cache I/O, email parsing
 ├── cli_tmq.py           # tempmailq.com client (sessions, CSRF, requests)
 ├── cli_maildax.py       # maildax.cc client (CLI side, partial)
@@ -39,15 +38,15 @@ tempmail/
 ├── modules/
 │   ├── tempmailq.py     # tempmailq.com client class, used by main.py
 │   └── maildax.py       # standalone maildax.cc client class
-└── .tempmail_cache.json # cached sessions/tokens per mailbox (auto-generated)
+└── .unimail_cache.json  # cached sessions/tokens per mailbox (auto-generated)
 ```
 
 ## Usage
 
-### CLI (`tempmail.py`)
+### CLI (`unimail.py`)
 
 ```bash
-python tempmail.py --help
+python unimail.py --help
 ```
 
 | Command | Description |
@@ -63,9 +62,9 @@ python tempmail.py --help
 Example:
 
 ```bash
-python tempmail.py --mail-id mytest@wqacmjaqe.xyz
-python tempmail.py --list-message mytest@wqacmjaqe.xyz
-python tempmail.py --view-message mytest@wqacmjaqe.xyz 1
+python unimail.py --mail-id mytest@wqacmjaqe.xyz
+python unimail.py --list-message mytest@wqacmjaqe.xyz
+python unimail.py --view-message mytest@wqacmjaqe.xyz 1
 ```
 
 ### Interactive TUI (`main.py`)
@@ -90,5 +89,5 @@ address, browse address history, or delete & regenerate the current mailbox.
 
 - `maildax.cc` support is implemented as a standalone client
   (`modules/maildax.py`) but isn't yet wired into the CLI or TUI command flow.
-- Session/token state is cached locally (`.tempmail_cache.json` for the CLI,
+- Session/token state is cached locally (`.unimail_cache.json` for the CLI,
   `session.json` for the TUI) so mailboxes survive across runs.

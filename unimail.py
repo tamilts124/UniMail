@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-tempmail.py - TempMail CLI entry point.
+unimail.py - UniMail CLI entry point.
 
 Logic now lives in (split out for easier editing):
   cli_config.py    - config, ANSI helpers, cache I/O, email/domain parsing
@@ -70,7 +70,7 @@ def main():
 
         else:
             err(f"Unknown argument: '{arg}'")
-            print(f"  Run  {c('yellow','python tempmail.py --help')}  for usage.")
+            print(f"  Run  {c('yellow','python unimail.py --help')}  for usage.")
             sys.exit(1)
 
         i += 1
