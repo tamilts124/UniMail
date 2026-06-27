@@ -1,0 +1,30 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Backup files
+*.bak
+*.orig
+*.tmp
+
+# Debug / scratch files
+debug_*.py
+debug_*.txt
+err.txt
+
+# Local cache / state
+.tempmail_cache.json
+
+# Env / secrets
+.env
+*.env.local
+
+# Logs
+*.log
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
