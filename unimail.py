@@ -12,10 +12,19 @@ See cli_tmq.py for the CSRF protocol notes (HAR 2026-06-27).
 """
 
 import sys
+import io
+
+# Reconfigure stdout/stderr to use UTF-8 to prevent UnicodeEncodeError on Windows
+if sys.stdout.encoding != 'utf-8':
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+if sys.stderr.encoding != 'utf-8':
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+
 from cli_config import load_cache, err, c, set_debug
 from cli_commands import (
     cmd_help, cmd_list_site, cmd_list_domain,
     cmd_mail_id, cmd_list_message, cmd_view_message, cmd_delete_id,
+    cmd_real_mail_id,
 )
 
 
@@ -67,6 +76,10 @@ def main():
         elif arg == "--delete-id":
             if i + 1 >= len(args): err("--delete-id requires user@domain."); sys.exit(1)
             i += 1; cmd_delete_id(args[i], cache)
+
+        elif arg == "--real-mail-id":
+            if i + 1 >= len(args): err("--real-mail-id requires user@domain."); sys.exit(1)
+            i += 1; cmd_real_mail_id(args[i], cache)
 
         else:
             err(f"Unknown argument: '{arg}'")

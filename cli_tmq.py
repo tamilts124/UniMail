@@ -29,20 +29,35 @@ import re, time, urllib.parse
 from curl_cffi import requests as curl_requests
 
 from cli_config import (
-    dbg, save_cache, TEMPMAILQ_BASE, IMPERSONATE, HTTP_TIMEOUT,
+    dbg, save_cache, TEMPMAILQ_BASE, MAILDAX_BASE, DAKBOX_BASE, TEMPMAILWORLD_BASE,
+    DISPOSABLE_BASE, IMPERSONATE, HTTP_TIMEOUT, parse_email,
 )
 
 # in-process session pool: email_key -> {"session": Session, "xsrf": str, "meta_token": str}
 _tmq_pool: dict[str, dict] = {}
 
 
-def _tmq_new_session() -> curl_requests.Session:
+def _get_site_details(email_key: str) -> tuple[str, str]:
+    user, domain, site = parse_email(email_key)
+    if site == "maildax.cc":
+        return MAILDAX_BASE, "maildax.cc"
+    elif site == "dakbox.net":
+        return DAKBOX_BASE, "dakbox.net"
+    elif site == "temp-mail-world.com":
+        return TEMPMAILWORLD_BASE, "temp-mail-world.com"
+    elif site == "disposableemailgenerator.com":
+        return DISPOSABLE_BASE, "disposableemailgenerator.com"
+    else:
+        return TEMPMAILQ_BASE, "tempmailq.com"
+
+
+def _tmq_new_session(base_url: str) -> curl_requests.Session:
     s = curl_requests.Session(impersonate=IMPERSONATE)
     s.headers.update({
         "Accept":          "application/json, text/plain, */*",
         "Accept-Language": "en-US,en;q=0.9",
-        "Referer":         TEMPMAILQ_BASE + "/",
-        "Origin":          TEMPMAILQ_BASE,
+        "Referer":         base_url + "/",
+        "Origin":          base_url,
     })
     return s
 
@@ -68,22 +83,22 @@ def _tmq_extract_meta_token(html_text: str) -> str:
     return ""
 
 
-def _tmq_seed(s: curl_requests.Session) -> tuple[str, str]:
+def _tmq_seed(s: curl_requests.Session, base_url: str) -> tuple[str, str]:
     """
     GET homepage. Returns (xsrf_cookie_value, meta_csrf_token).
     xsrf  -> sent as x-xsrf-token header on every POST
     meta  -> sent as _token body field on every POST
     """
-    dbg(f"tmq: GET {TEMPMAILQ_BASE}/ ...")
+    dbg(f"tmq: GET {base_url}/ ...")
     t0 = time.time()
-    resp = s.get(TEMPMAILQ_BASE + "/", timeout=HTTP_TIMEOUT)
+    resp = s.get(base_url + "/", timeout=HTTP_TIMEOUT)
     xsrf = _tmq_xsrf(s)
     meta = _tmq_extract_meta_token(resp.text)
     dbg(f"tmq: GET / -> {resp.status_code} in {time.time()-t0:.2f}s  xsrf={xsrf[:20]!r}...  meta_token={meta!r}")
     return xsrf, meta
 
 
-def _tmq_post(s: curl_requests.Session, endpoint: str, data: dict,
+def _tmq_post(s: curl_requests.Session, base_url: str, endpoint: str, data: dict,
               xsrf: str, meta_token: str) -> tuple[dict, str, str]:
     """
     POST JSON:
@@ -99,16 +114,16 @@ def _tmq_post(s: curl_requests.Session, endpoint: str, data: dict,
     headers = {"x-xsrf-token": xsrf} if xsrf else {}
     dbg(f"tmq: POST {endpoint} _token={meta_token!r} x-xsrf={xsrf[:20]!r}... ...")
     t0 = time.time()
-    resp = s.post(TEMPMAILQ_BASE + endpoint, json=payload, headers=headers, timeout=HTTP_TIMEOUT)
+    resp = s.post(base_url + endpoint, json=payload, headers=headers, timeout=HTTP_TIMEOUT)
     elapsed = time.time() - t0
     dbg(f"tmq: POST {endpoint} -> {resp.status_code} in {elapsed:.2f}s  body[:200]={resp.text[:200]!r}")
 
     if resp.status_code == 419:
         dbg("tmq: 419 — re-seeding and retrying once")
-        xsrf, meta_token = _tmq_seed(s)
+        xsrf, meta_token = _tmq_seed(s, base_url)
         payload["_token"] = meta_token
         headers = {"x-xsrf-token": xsrf} if xsrf else {}
-        resp = s.post(TEMPMAILQ_BASE + endpoint, json=payload, headers=headers, timeout=HTTP_TIMEOUT)
+        resp = s.post(base_url + endpoint, json=payload, headers=headers, timeout=HTTP_TIMEOUT)
         dbg(f"tmq: retry -> {resp.status_code}  body[:200]={resp.text[:200]!r}")
 
     # XSRF-TOKEN cookie may rotate on any response; keep it fresh
@@ -155,6 +170,7 @@ def _tmq_get_session(email_key: str, cache: dict) -> tuple[curl_requests.Session
         return p["session"], xsrf, p["meta_token"]
 
     user, domain = email_key.split("@", 1)
+    base_url, cookie_domain = _get_site_details(email_key)
     mb = cache["mailboxes"].get(email_key, {})
 
     # 2. Try restore from cache
@@ -164,10 +180,10 @@ def _tmq_get_session(email_key: str, cache: dict) -> tuple[curl_requests.Session
 
     if saved_cookies and saved_xsrf and saved_meta_token:
         dbg(f"tmq: restoring session for {email_key} from cache ...")
-        s = _tmq_new_session()
+        s = _tmq_new_session(base_url)
         for k, v in saved_cookies.items():
-            s.cookies.set(k, v, domain="tempmailq.com")
-        body, xsrf, meta = _tmq_post(s, "/get_messages", {}, saved_xsrf, saved_meta_token)
+            s.cookies.set(k, v, domain=cookie_domain)
+        body, xsrf, meta = _tmq_post(s, base_url, "/get_messages", {}, saved_xsrf, saved_meta_token)
         if "error" not in body:
             active = body.get("mailbox", "")
             dbg(f"tmq: /get_messages after restore -> active={active!r}")
@@ -177,7 +193,7 @@ def _tmq_get_session(email_key: str, cache: dict) -> tuple[curl_requests.Session
                 return s, xsrf, meta
             # Session alive but on a different address — switch
             dbg(f"tmq: session on {active!r}, switching to {email_key!r}")
-            body2, xsrf2, meta2 = _tmq_post(s, "/change", {"name": user, "domain": domain}, xsrf, meta)
+            body2, xsrf2, meta2 = _tmq_post(s, base_url, "/change", {"name": user, "domain": domain}, xsrf, meta)
             if "error" not in body2 and body2.get("mailbox") == email_key:
                 _tmq_pool[email_key] = {"session": s, "xsrf": xsrf2, "meta_token": meta2}
                 _tmq_save(email_key, s, xsrf2, meta2, body2.get("email_token", ""), cache)
@@ -185,23 +201,21 @@ def _tmq_get_session(email_key: str, cache: dict) -> tuple[curl_requests.Session
         dbg(f"tmq: restore failed — fresh session for {email_key}")
 
     # 3. Fresh session
-    s = _tmq_new_session()
-    xsrf, meta = _tmq_seed(s)
+    s = _tmq_new_session(base_url)
+    xsrf, meta = _tmq_seed(s, base_url)
     if not meta:
-        raise RuntimeError("tempmailq: could not extract csrf meta token from homepage HTML")
+        raise RuntimeError(f"Laravel client: could not extract csrf meta token from homepage HTML ({base_url})")
 
     # The server only sets its mailbox/email cookie once /get_messages has been
-    # called at least once on this session (confirmed via HAR 2026-06-27: every
-    # real browser session calls /get_messages before the first /change). Calling
-    # /change before that fails with {"success":false,"message":"Email cookie not found"}.
-    body0, xsrf, meta = _tmq_post(s, "/get_messages", {}, xsrf, meta)
+    # called at least once on this session. Calling /change before that fails.
+    body0, xsrf, meta = _tmq_post(s, base_url, "/get_messages", {}, xsrf, meta)
     if "error" in body0:
-        raise RuntimeError(f"tempmailq: initial /get_messages failed: {body0}")
+        raise RuntimeError(f"Laravel client: initial /get_messages failed: {body0}")
     dbg(f"tmq: initial /get_messages -> mailbox={body0.get('mailbox')!r}")
 
-    body, xsrf, meta = _tmq_post(s, "/change", {"name": user, "domain": domain}, xsrf, meta)
+    body, xsrf, meta = _tmq_post(s, base_url, "/change", {"name": user, "domain": domain}, xsrf, meta)
     if "error" in body or not body.get("mailbox"):
-        raise RuntimeError(f"tempmailq /change failed: {body}")
+        raise RuntimeError(f"Laravel client: /change failed: {body}")
     dbg(f"tmq: /change -> mailbox={body.get('mailbox')!r}")
     _tmq_pool[email_key] = {"session": s, "xsrf": xsrf, "meta_token": meta}
     _tmq_save(email_key, s, xsrf, meta, body.get("email_token", ""), cache)
@@ -211,7 +225,8 @@ def _tmq_get_session(email_key: str, cache: dict) -> tuple[curl_requests.Session
 def _tmq_call(email_key: str, endpoint: str, data: dict, cache: dict) -> dict:
     """Get session for email_key, POST endpoint, persist updated state, return body."""
     s, xsrf, meta = _tmq_get_session(email_key, cache)
-    body, xsrf, meta = _tmq_post(s, endpoint, data, xsrf, meta)
+    base_url, _ = _get_site_details(email_key)
+    body, xsrf, meta = _tmq_post(s, base_url, endpoint, data, xsrf, meta)
     _tmq_pool[email_key] = {"session": s, "xsrf": xsrf, "meta_token": meta}
     _tmq_save(email_key, s, xsrf, meta, body.get("email_token", ""), cache)
     return body
@@ -220,20 +235,13 @@ def _tmq_call(email_key: str, endpoint: str, data: dict, cache: dict) -> dict:
 def _tmq_fetch_message_html(email_key: str, msg_id: str, cache: dict) -> str:
     """
     GET /msg/{id} — returns the actual rendered email body HTML.
-    This is the iframe-src endpoint used by the web UI on the message-view
-    page; /get_messages often returns "content": "" for the list view, so
-    the full body has to be fetched separately via this endpoint.
-    Confirmed from HAR: GET https://tempmailq.com/msg/{id}
-      Referer: https://tempmailq.com/view/{id}
-      sec-fetch-dest: iframe
-    No CSRF token needed (plain GET), but the session's cookies (laravel_session,
-    XSRF-TOKEN, email) must be attached, so we reuse the mailbox's live session.
     """
     s, _, _ = _tmq_get_session(email_key, cache)
-    url = f"{TEMPMAILQ_BASE}/msg/{msg_id}"
+    base_url, _ = _get_site_details(email_key)
+    url = f"{base_url}/msg/{msg_id}"
     headers = {
         "Accept":   "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-        "Referer":  f"{TEMPMAILQ_BASE}/view/{msg_id}",
+        "Referer":  f"{base_url}/view/{msg_id}",
     }
     dbg(f"tmq: GET {url} ...")
     resp = s.get(url, headers=headers, timeout=HTTP_TIMEOUT)
@@ -245,13 +253,12 @@ def _tmq_fetch_message_html(email_key: str, msg_id: str, cache: dict) -> str:
 
 def _tmq_get_message_body(email_key: str, msg_id: str, cache: dict) -> str:
     """
-    GET /msg/{id} - the full message HTML body. NOT included in /get_messages,
-    which always returns content: "" in its list payload. The real site loads
-    this URL into a sandboxed <iframe> on the /view/{id} page.
+    GET /msg/{id} - the full message HTML body.
     """
     s, xsrf, meta = _tmq_get_session(email_key, cache)
+    base_url, _ = _get_site_details(email_key)
     dbg(f"tmq: GET /msg/{msg_id} ...")
-    resp = s.get(f"{TEMPMAILQ_BASE}/msg/{msg_id}", timeout=HTTP_TIMEOUT)
+    resp = s.get(f"{base_url}/msg/{msg_id}", timeout=HTTP_TIMEOUT)
     dbg(f"tmq: GET /msg/{msg_id} -> {resp.status_code} ({len(resp.text)} bytes)")
     if resp.status_code != 200:
         return ""

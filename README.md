@@ -1,93 +1,85 @@
 # UniMail
 
-A unified CLI and TUI for disposable email — one consistent interface across
-multiple temp-mail providers (tempmailq.com, maildax.cc, and more). Built on
-`curl_cffi` browser-impersonation sessions so requests aren't fingerprint-blocked.
+A unified CLI for disposable email — one consistent interface across multiple temp-mail providers (tempmailq.com, maildax.cc, chatworkon.com, tempmailsall.com, dakbox.net, temp-mail-world.com, and disposableemailgenerator.com). Built on `curl_cffi` browser-impersonation sessions so requests aren't fingerprint-blocked.
 
 ## Features
 
-- Create, switch, and delete disposable mailboxes across providers
-- List and read inbox messages (HTML bodies are cleaned up into readable text)
-- Per-mailbox session persistence (cookies + CSRF tokens cached to disk, so
-  you don't have to re-create a mailbox every run)
-- Verbose `--debug` request/response logging
-- Handles tempmailq.com's dual CSRF scheme (XSRF-TOKEN cookie *and* a Laravel
-  meta `_token`) automatically, including token rotation and 419 retries
+- Create, switch, list, and delete disposable mailboxes across multiple providers.
+- List and read inbox messages (HTML bodies are parsed/cleaned up into readable formatted CLI text).
+- Per-mailbox session persistence: sessions (cookies, CSRF tokens, or JWTs) are cached in `.unimail_cache.json` so your mailboxes survive across runs.
+- Verbose `--debug` request/response logging for troubleshooting.
+- Automatically handles complex provider details:
+  - Laravel-based double CSRF tokens for `tempmailq.com`, `maildax.cc`, `dakbox.net`, `temp-mail-world.com`, and `disposableemailgenerator.com`.
+  - JWT Bearer Token authorization and `tmp` username prefix normalization for `chatworkon.com`.
+  - WordPress admin-ajax nonces and random mailbox allocation for `tempmailsall.com`.
 
 ## Requirements
 
 - Python 3.10+
 - [`curl_cffi`](https://github.com/yifeikong/curl_cffi)
-- [`rich`](https://github.com/Textualize/rich) (TUI only)
-- [`beautifulsoup4`](https://www.crummy.com/software/BeautifulSoup/) (TUI only)
 
 ```bash
-pip install curl_cffi rich beautifulsoup4
+pip install curl_cffi
 ```
 
 ## Project Structure
 
 ```
 tempmail/
-├── unimail.py           # CLI entry point
-├── cli_config.py        # shared config, ANSI colors, cache I/O, email parsing
-├── cli_tmq.py           # tempmailq.com client (sessions, CSRF, requests)
-├── cli_maildax.py       # maildax.cc client (CLI side, partial)
-├── cli_commands.py      # implementation of each --flag command
-├── main.py              # interactive TUI entry point (rich-based)
-├── modules/
-│   ├── tempmailq.py     # tempmailq.com client class, used by main.py
-│   └── maildax.py       # standalone maildax.cc client class
+├── unimail.py           # CLI entry point (handles --help and reconfigures UTF-8 encoding)
+├── cli_config.py        # shared config, ANSI colors, cache I/O, and email parsing/normalization
+├── cli_tmq.py           # Laravel generic client (tempmailq.com & maildax.cc)
+├── cli_cwo.py           # chatworkon.com client (JWT authorization and raw email RFC822 parsing)
+├── cli_tms.py           # tempmailsall.com client (WordPress admin-ajax nonces & sessions)
+├── cli_maildax.py       # maildax.cc helper
+├── cli_commands.py      # implementation of each command-line flag
 └── .unimail_cache.json  # cached sessions/tokens per mailbox (auto-generated)
 ```
 
 ## Usage
 
-### CLI (`unimail.py`)
-
 ```bash
 python unimail.py --help
 ```
 
+### CLI Commands
+
 | Command | Description |
 |---|---|
 | `--list-site` | List all supported sites and their domains |
-| `--list-domain <site>` | List available domains for a site, e.g. `tempmailq.com` |
-| `--mail-id <user@domain>` | Create or reuse a mailbox |
+| `--list-domain <site>` | List available domains for a site, e.g., `tempmailq.com` |
+| `--mail-id <user@domain>` | Create or reuse a mailbox (e.g. `test@chatcloud.site` or `mytest@wqacmjaqe.xyz`) |
 | `--list-message <user@domain>` | List messages in a mailbox |
-| `--view-message <user@domain> <n>` | View message #n (1-based) |
-| `--delete-id <user@domain>` | Delete a mailbox on the server and from local cache |
-| `--debug` | Verbose request/response logging (combine with any command) |
+| `--view-message <user@domain> <n>` | View message #n (1-based index) |
+| `--delete-id <user@domain>` | Remove mailbox from local cache (and delete on server if supported) |
+| `--real-mail-id <user@domain>` | Get the real mailbox ID for a mock ID (or prints the input itself if not mock) |
+| `--debug` | Enable verbose request/response logging (can be appended anywhere) |
 
-Example:
+### Examples
 
+**Using TempMailQ / Maildax:**
 ```bash
 python unimail.py --mail-id mytest@wqacmjaqe.xyz
 python unimail.py --list-message mytest@wqacmjaqe.xyz
 python unimail.py --view-message mytest@wqacmjaqe.xyz 1
 ```
 
-### Interactive TUI (`main.py`)
-
+**Using Chatworkon (chatcloud.site):**
 ```bash
-python main.py
+# Note: chatworkon always prepends a 'tmp' prefix to the mailbox address (created as tmptest@chatcloud.site)
+python unimail.py --mail-id test@chatcloud.site
+python unimail.py --list-message tmptest@chatcloud.site
+python unimail.py --view-message tmptest@chatcloud.site 1
 ```
 
-A menu-driven `rich` interface for tempmailq.com: refresh inbox, create a new
-address, browse address history, or delete & regenerate the current mailbox.
+## Supported Providers & Domains
 
-## Known Domains
-
-| Domain | Provider |
-|---|---|
-| wqacmjaqe.xyz | tempmailq.com |
-| maildax.space / maildax.store / maildax.online | maildax.cc |
-
-(Domain lists are refreshed live from each site's homepage where possible.)
-
-## Notes
-
-- `maildax.cc` support is implemented as a standalone client
-  (`modules/maildax.py`) but isn't yet wired into the CLI or TUI command flow.
-- Session/token state is cached locally (`.unimail_cache.json` for the CLI,
-  `session.json` for the TUI) so mailboxes survive across runs.
+| Site / Provider | Domain Mapping | Protocol Details |
+|---|---|---|
+| **tempmailq.com** | `wqacmjaqe.xyz` | Laravel CSRF (XSRF Header & Meta Token) + Session Cookie |
+| **maildax.cc** | `maildax.space`, `maildax.store`, `maildax.online` | Laravel CSRF + Session Cookie |
+| **chatworkon.com** | `chatcloud.site` | Stateless JWT Bearer Header + prepended `tmp` username prefix |
+| **tempmailsall.com** | `edubd.edu.pl` | WordPress admin-ajax (scraped nonce, session_id allocation) |
+| **dakbox.net** | `dakbox.net` | Laravel CSRF + Session Cookie |
+| **temp-mail-world.com** | `10-minutes.email` | Laravel CSRF + Session Cookie |
+| **disposableemailgenerator.com** | `disposableemailgenerator.com`, `hdhub4u.us` | Laravel CSRF + Session Cookie |

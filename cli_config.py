@@ -28,8 +28,13 @@ def dbg(msg):
         print(f"[{time.strftime('%H:%M:%S')}] DEBUG: {msg}", file=sys.stderr, flush=True)
 
 SITE_DOMAINS = {
-    "tempmailq.com": ["wqacmjaqe.xyz"],
-    "maildax.cc":    ["maildax.space", "maildax.store", "maildax.online"],
+    "tempmailq.com":  ["wqacmjaqe.xyz"],
+    "maildax.cc":     ["maildax.space", "maildax.store", "maildax.online"],
+    "chatworkon.com": ["chatcloud.site"],
+    "tempmailsall.com": ["edubd.edu.pl"],
+    "dakbox.net":      ["dakbox.net"],
+    "temp-mail-world.com": ["10-minutes.email"],
+    "disposableemailgenerator.com": ["disposableemailgenerator.com", "hdhub4u.us"],
 }
 
 def _build_domain_map() -> dict[str, str]:
@@ -41,8 +46,14 @@ def _build_domain_map() -> dict[str, str]:
 
 DOMAIN_MAP = _build_domain_map()
 
-TEMPMAILQ_BASE = "https://tempmailq.com"
-MAILDAX_BASE   = "https://maildax.cc"
+TEMPMAILQ_BASE  = "https://tempmailq.com"
+MAILDAX_BASE    = "https://maildax.cc"
+CHATWORKON_BASE     = "https://mail.chatworkon.com"
+CHATWORKON_API_BASE = "https://mailapi.chatworkon.com"
+TEMPMAILSALL_BASE = "https://tempmailsall.com"
+DAKBOX_BASE       = "https://www.dakbox.net"
+TEMPMAILWORLD_BASE = "https://www.temp-mail-world.com"
+DISPOSABLE_BASE    = "https://disposableemailgenerator.com"
 
 # ── ANSI ──────────────────────────────────────────────────────────────────────
 
@@ -88,7 +99,12 @@ def parse_email(raw: str) -> tuple[str, str, str]:
         err(f"Unknown domain '{domain}'.")
         _print_known_domains()
         sys.exit(1)
-    return user, domain, DOMAIN_MAP[domain]
+    
+    site = DOMAIN_MAP[domain]
+    if site == "chatworkon.com" and not user.lower().startswith("tmp"):
+        user = "tmp" + user
+        
+    return user, domain, site
 
 def _print_known_domains():
     print(f"\n  Known domains:")

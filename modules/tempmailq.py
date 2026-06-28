@@ -184,20 +184,31 @@ class TempMailQ:
         self.xsrf_token, self.meta_token = _seed(self.session)
         if not self.meta_token:
             raise RuntimeError("tempmailq: could not extract csrf meta token from homepage HTML")
-        if email:
-            user, domain = email.split('@', 1)
-        else:
-            user   = ''.join(random.choices(string.ascii_lowercase + string.digits, k=8))
-            domain = DOMAINS[0]
-        body, xsrf, meta = _post(self.session, '/change',
-                                 {'name': user, 'domain': domain},
+
+        # Call /get_messages to establish session and set email cookie
+        body, xsrf, meta = _post(self.session, '/get_messages', {},
                                  self.xsrf_token, self.meta_token)
-        if 'error' in body or not body.get('mailbox'):
-            raise RuntimeError(f"tempmailq: /change failed: {body}")
-        self.xsrf_token    = xsrf
-        self.meta_token    = meta
-        self.current_email = body['mailbox']
-        self.email_token   = body.get('email_token', '')
+        if 'error' in body:
+            raise RuntimeError(f"tempmailq: initial /get_messages failed: {body}")
+
+        self.xsrf_token = xsrf
+        self.meta_token = meta
+        self.current_email = body.get('mailbox')
+        self.email_token = body.get('email_token', '')
+
+        # If a specific email is desired, switch to it
+        if email and email != self.current_email:
+            user, domain = email.split('@', 1)
+            body2, xsrf2, meta2 = _post(self.session, '/change',
+                                     {'name': user, 'domain': domain},
+                                     self.xsrf_token, self.meta_token)
+            if 'error' in body2 or not body2.get('mailbox'):
+                raise RuntimeError(f"tempmailq: /change failed: {body2}")
+            self.xsrf_token = xsrf2
+            self.meta_token = meta2
+            self.current_email = body2['mailbox']
+            self.email_token = body2.get('email_token', '')
+
         self._save()
 
     # ── internal call helper ───────────────────────────────────────────────
