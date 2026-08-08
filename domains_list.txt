@@ -316,3 +316,47 @@ NOTES FOR NEXT SESSION (added 2026-08-08):
 - For all PENDING above: probe API first (fetch /api or check network tab), if REST/JSON and no captcha → implement; else mark COMPLEX or NOT_WORKING
 - Skip: addy.io (requires account token), smailpro.com (paid), temp-mail.org (RapidAPI key), mailsac.com (paid)
 - All 5 above are NOT in current domains_list.txt and have NOT been probed before
+
+PRIORITY 16 (Newly Suggested - 2026-08-08, research-based, probe in future sessions):
+
+--- HIGH CONFIDENCE (likely easy REST API, worth probing first) ---
+
+https://mail.gw/ [PENDING] → ALREADY IN PRIORITY 15 — identical API to mail.tm (api.mail.gw), confirmed active Python SDK exists on PyPI (MailGw-Temporary-Email), async client on GitHub (Mar 2026) — highest priority, easiest win
+https://tmail.io/ [PENDING] → active service, no official public API but temp-mails PyPI lib scrapes it successfully (unofficial); probe network tab for REST endpoints; domain: tmail.io; worth quick HAR capture
+https://tmpmail.co/ [PENDING] → listed in temp-mails PyPI lib as working unofficial scrape; probe for REST endpoints via HAR
+https://temp.cab/ [PENDING] → ALREADY IN PRIORITY 15 — appeared on castle.io active blocklist Oct 2025; probe for REST API
+https://mailcatch.com/ [PENDING] → ALREADY IN PRIORITY 15 — appeared on active blocklists; probe for REST API
+https://mytemp.email/ [PENDING] → ALREADY IN PRIORITY 15 — appears on multiple Oct 2025 active lists; probe for REST API
+https://moakt.com/ [PENDING] → ALREADY IN PRIORITY 15 — active on blocklists; probe for REST API
+
+--- MEDIUM CONFIDENCE (larger domain pools, but may need scraping or have rate limits) ---
+
+https://tmailor.com/ [PENDING] → 63 email domains, token-based reuse, no public API (receive-only, no send); temp-mails PyPI uses unofficial scrape (~5 emails/IP limit); probe carefully — may be COMPLEX due to rate limit
+https://burnermail.io/ [PENDING] → 73 email domains (huge pool!); no known public API; probe network tab for REST endpoints; previously showed 404 in session-12 but worth retrying
+https://tmail.delivery/ [PENDING] → 105 email domains (LARGEST known pool!); very new service; probe for REST API endpoints — high value if it works
+https://mailscr.us/ [PENDING] → 102 email domains; probe for REST API — high value if it works
+https://m.kuku.lu/ [PENDING] → 96 email domains; old but active; temp-mails PyPI wraps it; probe for REST/scrape API
+https://trashmailr.com/ [PENDING] → 42 email domains; probe for REST API
+https://mail-temp.site/ [PENDING] → 43 email domains; probe for REST API
+
+--- LOW CONFIDENCE (likely paid, captcha, or registration required — probe last) ---
+
+https://tempmail.id.vn/ [PENDING] → 38 email domains; unknown API; probe
+https://edumailfree.com/ [PENDING] → 35 email domains; unknown API; probe
+https://txen.de/ [PENDING] → listed in temp-mails PyPI; probe for REST API
+https://trashmail.de/ [PENDING] → semi-official API per temp-mails PyPI (uses RapidAPI); likely requires key — probably NOT_WORKING
+https://trashmail.ws/ [PENDING] → unofficial scrape only per temp-mails PyPI; likely COMPLEX
+https://mainnetmail.com/ [PENDING] → 54 email domains; unknown API; probe
+
+--- SKIP (confirmed paid/registration/captcha from research) ---
+https://smailpro.com/ [NOT_WORKING] → paid API (real Gmail/Outlook pool, Sonjj credits required); no free tier
+https://tmailor.com/ → no public API confirmed; max ~5 emails/IP before rate limit
+https://zemail.me/ [NOT_WORKING] → already confirmed paid API key in session-24
+
+NOTES FOR NEXT SESSION (added 2026-08-08):
+- Best order to probe: mail.gw (reuse mailtm code) → tmail.io → tmail.delivery → mailscr.us → burnermail.io → tmailor.com → m.kuku.lu → tmpmail.co → trashmailr.com → mail-temp.site
+- tmail.delivery and mailscr.us have 100+ domains each — very high value if APIs are accessible
+- Use temp-mails PyPI source code (github.com/bejda/temp-mails or similar) as reference for any unofficial scraping approach
+- For all PENDING: open browser devtools network tab → fetch /api, /v1, /graphql, or watch XHR calls on page load
+- GEO note: some services may block IN IPs — test with proxy if needed
+- Domain count reference source: deviceandbrowserinfo.com/data/emails/providers (checked 2026-08-08)
