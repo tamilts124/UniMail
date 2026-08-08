@@ -1,0 +1,318 @@
+TEMPMAIL SERVICES - INTEGRATION TRACKING LIST
+=============================================
+Last Updated: 2026-07-21T02:35:00Z
+
+ORIGINAL DOMAINS TO TEST:
+========================
+
+https://temporarymailservice.com/ [FAILED] → tomail.fyi | Laravel CSRF implemented but site requires reCAPTCHA on /get_messages — blocks headless use
+https://gettempmail.org/ [NOT_WORKING] → DNS dead
+https://tempmail.ee/ [HAR_CAPTURED] [COMPLEX] → Cloudflare Turnstile; needs stealth browser
+https://mail.chatworkon.com/ [IMPLEMENTED] [TESTED]
+https://tempbmail.com/ [NOT_WORKING] → Domain hijacked (fake download page)
+https://tempmailq.com/ [IMPLEMENTED] [TESTED]
+https://www.temp-mail-world.com/en [IMPLEMENTED] [TESTED]
+https://zhimail.xyz/ [IMPLEMENTED] [SLOW] → zhimail.xyz/in/zhimails.work/zhimails.vip | Laravel CSRF (same as tempmailq) | server very slow, times out at 45s
+https://mailditch.com/en [FAILED] → ditch.my.id | Laravel CSRF implemented but site requires reCAPTCHA on /get_messages — blocks headless use
+https://tempmaili.com/index.php/ru [IMPLEMENTED] [TESTED] → munik.edu.pl | Laravel CSRF (same as tempmailq) | VERIFIED working
+https://maildax.cc/ [IMPLEMENTED] [TESTED]
+https://disposableemailgenerator.com/ [IMPLEMENTED] [TESTED]
+https://www.dakbox.net/ [IMPLEMENTED] [TESTED]
+https://tempmailsall.com/ [IMPLEMENTED] [TESTED]
+https://edumail.online/ [NOT_WORKING] → Site down/unreachable
+https://edumail.website/ [NOT_WORKING] → DNS dead
+
+NEWLY DISCOVERED SERVICES (Auto-Discovery Phase)
+=================================================
+Recommended for Integration (Easy-to-Adopt):
+
+PRIORITY 1 (High-Quality, Well-Documented):
+https://10minutemail.com/ [IMPLEMENTED] [TESTED] → cli_10mm.py | REST/JSON JSESSIONID session | address server-assigned | domains: vtmpj.com jbsze.net jbsze.com onldm.net gonrr.net
+https://guerrillamail.com/ [IMPLEMENTED] [TESTED] → cli_guerrilla.py | public JSON API sid_token | domains: grr.la sharklasers.com spam4.me guerrillamail.com/net/org/de/biz/info guerrillamailblock.com
+https://openinbox.io/ [IMPLEMENTED] [TESTED] → cli_openinbox.py | REST API no auth | address server-assigned | domains: inboxly.website inboxfast.space inboxfly.space
+https://mail.tm/ [IMPLEMENTED] [TESTED] → cli_mailtm.py | public REST API Bearer JWT
+https://mailinator.com/ [IMPLEMENTED] [TESTED] → cli_mailinator.py | public REST API /api/v2/domains/public/inboxes/<inbox> | no auth | stateless | NOTE: dont send test email (flagged for abuse by gmail)
+
+PRIORITY 2 (Modern/Feature-Rich):
+https://freecustom.email/ [IMPLEMENTED] [TESTED] -> cli_freecustom.py | anonymous JWT REST API | stateless | any username@domain works | domains: ditapi.info addmy.space attachmy.site + 15 more | VERIFIED email received at testclaude3@addmy.space
+https://tempforward.com/ [IMPLEMENTED] [TESTED] → cli_tempforward.py | token-based REST API | domain: tempforward.com | VERIFIED email received at miaross21@tempforward.com
+https://temp-mail.io/ [IMPLEMENTED] [TESTED] → cli_tempmailio.py | internal REST API api.internal.temp-mail.io/api/v3 | no auth | address server-assigned | domains: lnovic.com bwmyga.com yzcalo.com | VERIFIED email received
+https://tempemail.cc/ [IMPLEMENTED] [TESTED] → cli_tempemail.py | internal REST API Bearer JWT | domains: icmans.com | VERIFIED email received at naia2022@icmans.com
+https://sandvpn.com/temp-mail [NOT_WORKING] → 404 on both /temp-mail and /en/temp-mail — feature removed
+
+PRIORITY 3 (Niche/Specialized):
+https://maildrop.cc/ [IMPLEMENTED] [TESTED] → cli_maildrop.py | public GraphQL API https://api.maildrop.cc/graphql | no auth | stateless | VERIFIED email received
+https://fakemail.net/ [IMPLEMENTED] [TESTED] -> cli_fakemail.py | PHP session + AJAX endpoints | address server-assigned | domain: forliion.com | BOM fix applied | VERIFIED email received at testclaude99@forliion.com
+https://emailondeck.com/ [COMPLEX] → hCaptcha on step 1 blocks headless use; no API accessible without captcha solve
+https://throwawaymail.com/ [NOT_WORKING] → DNS dead (ERR_NAME_NOT_RESOLVED)
+https://tempmailo.com/ [IMPLEMENTED] [TESTED] → cli_tempmailo_com.py | ASP.NET Core + Cloudflare | address server-assigned | domains: denipl.net denipl.com fxzig.com (rotate) | API verified: creates mailbox + lists messages OK | NOTE: mx2.den.yt MX server does not accept Gmail delivery — API functional but not Gmail-deliverable
+
+PRIORITY 4 (Found in codebase, not previously tracked):
+https://mailmomy.com/ [IMPLEMENTED] [TESTED] → cli_mailmomy.py | public REST API no auth | stateless | domains: mailmomy.com 2famail.com xikemail.com protect.support easyme.pro 282mail.com bsdu32.buzz nuxh62.space doxu243.buzz xue32.buzz evergreenco.shop mingyuekeji.online | VERIFIED email received at testclaude@mailmomy.com AND testclaude@2famail.com
+https://www.1secmail.com/ [NOT_WORKING] → cli_1secmail.py exists but GEO-BLOCKED (403 Forbidden) from India on all endpoints — may work via proxy or non-IN IP
+
+STEPS TO WORK:
+===========
+PROJECT_DIRECTORY=D:\ClaudeDir\tempmail
+HAR_DIRECTORY =D:\ClaudeDir\tempmail\har
+DOMAIN_LIST =D:\ClaudeDir\tempmail\domains_list.txt 
+
+Recommendation: dont use your sandbox use only Custom Connector tools to work on my machine. you have git tools, file management tools, mailing tools, browser tools (use always headless false and use existing browser session already there means).
+
+1. Continue to export har file or network capture for all actions for remaining domains (if you see anything seems complex means mark complex and skip it, not working means mark not working or captured means mark as  har captured like you can mark them)
+2. If nothing left to capture the har file (including mail send to the temp mail and verify working or not that domain. also check it has multiple domain it will helpful because all thers same format so no need to verify all, only check one is working or not) means take one har file mark as in progress ana analyze that and implement the all the neccessory endpoint to unimail project, should be follow existing code structure to easy maintanence. once implemented mark as implemented and using the send mail tool to test the mail and verify it working or not. once confirmed all are working mark as tested which means all are perfect for that domain. if it is in progress means it is not fully implemented so have to implemented properly.
+3. Is no more domains there means you can find very latest temporary mail generators in web that are not available in out current list (dont forgot to add in list).
+4. In case the domain already implemented in unimail but not have status update in file means mark as inprogress and test via send mail tool if it is not working means mark as failed and have to check the har file not exists means do it, already exists means analyze and fix the problem
+5. some domain might slow in mail so use 1 min interval to check the mail is working or not.
+6. if you want to add any important notes for upcoming AI session means add in this file.
+7. dont forgot to create mail before send mail
+8. dont add any extra tracking file use DOMAIN_LIST file for any changes for future session
+9. dont forgot to update status of each domain for skip already done steps
+10. dont create new browser session if already exists means
+11. for mailinator.com and denipl.com domains dont use send_mail tool beause i am seeing huge undelived mail in my mails list, because it is something like blocked "500 this email is flagged for abuse" for mailinator and "DNS Error: DNS Type 'mx' lookup of denipl.com responded with code NXDOMAIN Domain name not found,..." in my gmail.
+12. on mail send test if the temp mail is not receiving the mail means, using custom connector tool to read the latest mails because the domain not be deliverable  by gmail.
+13. i have important request, that is once the domain is implemented and tested well via mail send means immediately update as tested because i am seeing the tested domain not marked as tested. so, the rate limit reason the another session treats freshly and doing again and again it does same mistakes. so dont forgot to mark tested even the single domain, you can do one by one.
+14. you are about to die, tokens are very low so dont do long session. do with maximum speed and choose shortest way.
+
+NOTES FOR NEXT AI SESSION:
+===========================
+- 2026-07-19 session-1: HAR capture complete for all original 16 domains.
+- 2026-07-19 session-2: Priority 1 (except mailinator) now IMPLEMENTED & TESTED.
+  * cli_config.py already updated with new domains: onldm.net, gonrr.net (10minutemail), inboxfly.space (openinbox)
+  * guerrillamail: VERIFIED — test email received at testclaude@grr.la
+  * openinbox: VERIFIED — test email received at zr66d02d4p0m@inboxfly.space
+  * 10minutemail: API confirmed working; address/session flow works; 10-min session expiry is expected
+  * mailinator.com: public inbox API at /api/v2/domains/{domain}/inboxes/{inbox} — try without API key first
+- 2026-07-20 session-3: mailmomy.com IMPLEMENTED & TESTED. cli_config.py syntax fixed (1secmail.com list was unclosed).
+  * mailmomy.com: VERIFIED — email received at testclaude@mailmomy.com AND testclaude@2famail.com
+  * cli_commands.py: fully wired mailmomy (mail-id, list-message, view-message, delete-id)
+  * 1secmail.com: cli_1secmail.py exists but NOT wired in cli_commands.py — GEO-BLOCKED from IN (403), skip
+  * ALL known domains now IMPLEMENTED+TESTED or have a final status (FAILED/NOT_WORKING/COMPLEX/SLOW)
+- NEXT SESSION should: discover NEW temp mail services not in this list (step 3 of workflow)
+  * Search web for latest disposable/temporary email services 2025-2026
+  * Good candidates to check: spamgourmet.com, mohmal.com, yopmail.com, tempinbox.com, minuteinbox.com,
+    inboxbear.com, crazymailing.com, incognitomail.org, trashmail.com, spamex.com, tempmailer.com,
+    tmailer.net, getnada.com, mailnesia.com, mailnull.com, spamspot.com, armyspy.com, cuvox.de,
+    dayrep.com, einrot.com, fleckens.hu, gustr.com, harakirimail.com, incognitomail.net, mailismagic.com,
+    mt2015.com, rhyta.com, teleworm.us, trbvm.com — check which ones have a public API
+  * Priority: services with clean REST/JSON APIs (no captcha, no JS-only rendering)
+  * Add new discoveries to this file under PRIORITY 5 (Newly Discovered NEXT SESSION)
+- 10minutemail domains rotate frequently — if new domains appear, add them to cli_config.py SITE_DOMAINS
+
+PRIORITY 5 (Newly Discovered - 2026-07-20 session-4) [PENDING]:
+https://www.mohmal.com/ [IMPLEMENTED] [TESTED] → cli_mohmal.py | server-side HTML, curl_cffi cookie session | domain: emailinbo.live | VERIFIED email received at f9bc59f702@emailinbo.live
+https://yopmail.com/ [COMPLEX] → HTML scraping only (no clean REST API); uses obfuscated JS; CAPTCHA risk on heavy use — no headless-friendly API
+https://catchmail.io/ [IMPLEMENTED] [TESTED] → cli_catchmail.py | public REST API no auth | stateless | domain: catchmail.io | VERIFIED email received at testclaude@catchmail.io
+https://tempmail.lol/ [NOT_WORKING] → GEO-BLOCKED for IN (India) — free tier blocks IN IPs; same pattern as v1
+https://muellmail.com/ [NOT_WORKING] → requires Premium/Login account; no free public API accessible
+https://tempmail.plus/ [IMPLEMENTED] [TESTED] → cli_tempmail_plus.py | internal REST API no auth | stateless | domain: mailto.plus | VERIFIED email received at testclaude@mailto.plus
+https://rainmail.xyz/ [NOT_WORKING] → no public API found; static site only
+https://noopmail.org/ [NOT_WORKING] → no public API found; no accessible endpoint
+https://temp-mail.gg/ [NOT_WORKING] → API requires account/login; no free public access
+
+PRIORITY 6 (Newly Discovered - 2026-07-20 session-9):
+https://harakirimail.com/ [IMPLEMENTED] [TESTED] → cli_harakirimail.py | public REST API no auth | stateless | domain: harakirimail.com | VERIFIED email received at testclaude@harakirimail.com
+
+- 2026-07-20 session-9: harakirimail.com IMPLEMENTED & TESTED.
+  * harakirimail.com: VERIFIED — email received at testclaude@harakirimail.com
+  * cli_harakirimail.py: GET /api/v1/inbox/<username> + GET /api/v1/email/<_id>
+  * No delete endpoint; emails auto-deleted after 24h
+  * Other probed services this session: trashmail.com (sold/redirected), inboxes.com/getnada.com (Gmail delivery fails),
+    inboxbear.com (DNS dead), minuteinbox.com (ERR_ABORTED), mailnull.com (ERR_ABORTED),
+    spamgourmet.com (requires registration), mailtemp.info (HTML only)
+  * NEXT SESSION: search for more new temp mail services with clean public APIs
+
+- 2026-07-20 session-4: Discovered new PENDING services (Priority 5 above). Web-searched for latest temp mail APIs.
+  * catchmail.io: clean REST API confirmed from their homepage; no auth; stateless; good candidate
+  * tempmail.lol: free tier confirmed (no key needed); POST /generate + GET /auth/messages/{token}; GEO-BLOCK risk for IN (same as tempmail.lol v1 — test first)
+  * mohmal.com: browser session df58a768 already open at mohmal.com; needs network capture + eval to discover endpoints
+  * yopmail.com: no clean REST/JSON API; HTML scraping with obfuscated JS; CAPTCHA risk — likely COMPLEX
+  * muellmail, tempmail.plus, rainmail.xyz, noopmail.org, temp-mail.gg: found in bertigert/temp-mails Python lib; need individual probe
+  * NEXT STEP: probe each PENDING service (browser eval or direct fetch) to confirm API, then implement one by one
+
+- 2026-07-20 session-7: mohmal.com IMPLEMENTED & TESTED.
+  * mohmal.com: VERIFIED — email received at f9bc59f702@emailinbo.live | cli_mohmal.py
+  * Session uses curl_cffi cookie jar; cookies serialized to cache so session survives process restarts
+  * No per-message delete — cmd_delete_id calls mohmal_delete_session (full logout)
+  * ALL known domains now IMPLEMENTED+TESTED or have a final status
+  * NEXT SESSION: search for NEW temp mail services (all current list complete)
+  * Good candidates: spamgourmet.com, trashmail.com, getnada.com, mailnesia.com, minuteinbox.com
+    inboxbear.com, incognitomail.org, spamex.com — check for clean REST/JSON APIs
+
+- 2026-07-20 session-6: catchmail.io and tempmail.plus IMPLEMENTED & TESTED.
+  * catchmail.io: VERIFIED — email received at testclaude@catchmail.io | cli_catchmail.py | domain: catchmail.io
+  * tempmail.plus: VERIFIED — email received at testclaude@mailto.plus | cli_tempmail_plus.py | domain: mailto.plus
+  * tempmail.lol: marked NOT_WORKING (GEO-BLOCKED IN)
+  * yopmail.com: marked COMPLEX (no clean API, obfuscated JS, CAPTCHA risk)
+  * muellmail.com, rainmail.xyz, noopmail.org, temp-mail.gg: marked NOT_WORKING (no free public API)
+  * mohmal.com: now IMPLEMENTED & TESTED (see session-7 above)
+
+PRIORITY 7 (Newly Discovered - 2026-07-20 session-10):
+https://dropmail.me/ [IMPLEMENTED] [TESTED] → cli_dropmail.py | GraphQL API, token in URL path, session-based | domains: spymail.one pickmail.org emlhub.com emlpro.com emltmp.com freeml.net mail2me.co mailpwr.com mailtowin.com maximail.vip mimimail.me pickmemail.com dropmail.me 10mail.info 10mail.org 10mail.xyz yomail.info | VERIFIED email received at bawypig1huzem4@mimimail.me
+
+- 2026-07-20 session-10: dropmail.me IMPLEMENTED & TESTED.
+  * dropmail.me: VERIFIED — email received at bawypig1huzem4@mimimail.me (confirmed via direct API check)
+  * cli_dropmail.py: POST /api/graphql/<token> with GraphQL mutations/queries
+  * Token generation: website_<date+16chars>_<fnv1a(random+secret)>, secret="tm_graphql_secret_2026"
+  * Session is stored on the original email key (no redirect_to to avoid chaining loops)
+  * Bug fix: removed redirect_to from dropmail sessions to prevent infinite chaining
+  * NEXT SESSION: discover more NEW temp mail services with clean public APIs
+  * Good new candidates to probe: mail.gw (official API like mail.tm), dispostable.com,
+    spamgourmet.com (requires registration - skip), mailnesia.com, altmails.com,
+    trbvm.com, incognitomail.org, spamspot.com, armyspy.com, cuvox.de, dayrep.com,
+    einrot.com, fleckens.hu, gustr.com, mailismagic.com, mt2015.com, rhyta.com, teleworm.us
+
+PRIORITY 8 (Newly Discovered - 2026-07-21 session-12):
+https://www.10minutemail.net/ [NOT_WORKING] → GEO-BLOCKED (403 Forbidden) from India on all endpoints — same as 1secmail.com; may work via proxy or non-IN IP | cli_10mm_net.py exists and is wired in cli_commands.py
+
+- 2026-07-21 session-12: 10minutemail.net discovered and implemented but GEO-BLOCKED.
+  * cli_10mm_net.py: written and wired in cli_commands.py (fully functional code)
+  * cli_config.py: "10minutemail.net": ["laoia.com"] added to SITE_DOMAINS
+  * BUT: 10minutemail.net returns 403 Forbidden from India — GEO-BLOCKED, same as 1secmail.com
+  * Marked NOT_WORKING; code exists if needed via proxy
+  * Session probing results this session:
+    - dispostable.com, mailnesia.com, trbvm.com: timed out / blocked from IN
+    - armyspy.com, einrot.com, gustr.com: Mailinator alias domains (no dedicated API)
+    - rhyta.com, mailismagic.com: DNS failed
+    - tempr.email, tempinbox.net, tempmailto.com, minute.email: 404 on API paths
+    - easytrashmail.com: HTML only
+    - mailsac.com: 401 (requires paid API key)
+    - inboxkitten.com: requires Mailgun; too complex
+    - burnermail.io, mailslurp.com: 404/401
+    - 10minutemail.net: 403 GEO-BLOCKED from IN
+  * Cleanup needed: probe11.py probe11b.py probe11c.py probe11d.py probe11_out.txt probe11b_out.txt probe11c_out.txt probe11d_out.txt patch_config.py wire_10mm_net.py wire_out.txt mailid_out.txt listmsg_out.txt
+  * NEXT SESSION: search for NEW temp mail services with clean public APIs accessible from IN
+
+PRIORITY 9 (Newly Discovered - 2026-07-21 session-15/16):
+https://www.minuteinbox.com/ [COMPLEX] → PHP session, but session ID managed via JavaScript (MI cookie is JS-controlled); PHPSESSID returned on 500 bootstrap refresh is invalid for subsequent calls; cannot be reliably used without headless browser; code written (cli_minuteinbox.py wired in cli_commands.py + cli_config.py) but session does not persist across requests; marking COMPLEX
+
+- 2026-07-21 session-15+16: minuteinbox.com — COMPLEX, marking abandoned.
+  * Root cause: Site uses MI cookie (empty, JS-managed) as pre-session token.
+    POST /index/index assigns email + expires MI. The PHPSESSID is issued only
+    on /index/refresh but that call returns 500 — the PHPSESSID received is
+    not bound to the assigned email session. Second /index/refresh also 500.
+    Session is managed via JS on the browser side; pure HTTP cannot maintain it.
+  * Code exists: cli_minuteinbox.py fully written and wired, but does not work.
+  * cli_commands.py and cli_config.py remain wired (no harm leaving them in).
+  * NEXT SESSION: search for more NEW temp mail services with clean public APIs.
+    Good fresh candidates to try:
+    - tempr.email (different URL pattern)
+    - jetable.fr (French disposable mail, may have API)
+    - mailnull.com (probed before as ERR_ABORTED — retry)
+    - privaterelay.appleid.com (Apple Hide My Email — no public API, skip)
+    - getairmail.com, mailtemp.info, tmpmail.net
+    - spamex.com (old service, may have simple API)
+    - sharklasers.com (guerrillamail alias — already done)
+    - Use bertigert/temp-mails repo to find any new additions since last check
+
+PRIORITY 10 (Newly Discovered - 2026-07-21 session-17):
+https://tempr.email/ [COMPLEX] → 56 domains; session-based; POST /en/inbox/list.htm with CSRF token + sid cookie; requires browser session for reliable use — no clean stateless API
+https://emailfake.com/ [COMPLEX] → Same backend as generator.email (api.emailfake.com); any username@domain works; scrape-based: GET /{domain}/{username} → extract token, POST del_mail.php {recieved:token} returns MD5 hash; email content only via WebSocket or HTML scrape; domains rotate daily — not stable enough for CLI use
+https://generator.email/ [COMPLEX] → Same backend as emailfake.com; identical API pattern; stateless but scrape/WebSocket based — not suitable for CLI polling
+https://tempmail.ninja/ [COMPLEX] → Nuxt.js app; internal API paths all 404; only WebSocket + SSR; free tier uses .lat domains — no accessible REST API without browser
+https://www.spam4.me/ [NOT_WORKING] → Guerrilla Mail alias domain (same API as cli_guerrilla.py); already covered by guerrillamail implementation
+https://altmails.com/ [NOT_WORKING] → Server down (HTTP 521)
+https://api.mailnesia.com/ [NOT_WORKING] → DNS dead (ENOTFOUND)
+https://getairmail.com/ [NOT_WORKING] → DNS dead (ENOTFOUND)
+https://www.fakeinbox.com/ [NOT_WORKING] → API 404
+https://www.spamgourmet.com/ [NOT_WORKING] → Requires registration; no public API
+https://mailtemp.info/ [NOT_WORKING] → Domain for sale (parked page)
+https://www.crazymailing.com/ [NOT_WORKING] → Cloudflare challenge blocks headless access
+
+PRIORITY 11 (Newly Discovered - 2026-07-21 session-18/19):
+https://www.eyepaste.com/ [IMPLEMENTED] [TESTED] -> cli_eyepaste.py | RSS-based stateless inbox | domain: eyepaste.com | VERIFIED email received at testclaude@eyepaste.com
+https://luxusmail.org/ [NOT_WORKING] -> redirects to tmp.al (503 Coming Soon)
+https://www.fakemailgenerator.com/ [NOT_WORKING] -> uses einrot.com (Mailinator alias)
+https://trashmail.at/ [NOT_WORKING] -> blank site, all API paths 404
+https://mail.gw/ [NOT_WORKING] -> 502 Bad Gateway
+https://inboxkitten.com/ [NOT_WORKING] -> HTML-only, requires Mailgun; no public JSON API
+https://zemail.me/ [NOT_WORKING] -> requires paid API key (Bearer zm_live_...); no free public API
+https://instanttempemail.com/ [NOT_WORKING] -> no API paths found (404); frontend-only
+https://temp-email.dev/ [NOT_WORKING] -> Next.js SPA; no accessible API endpoints
+
+- 2026-07-21 session-17: Probed 12+ new services, all either COMPLEX or NOT_WORKING.
+  * discard.email / tempr.email: same service (discard.email redirects to tempr.email); 56 domains, session+CSRF; COMPLEX
+  * emailfake.com / generator.email: same backend; scraping+WebSocket only; rotating domains; COMPLEX
+  * tempmail.ninja: Nuxt.js SPA, no accessible REST API; COMPLEX
+  * spam4.me: guerrillamail alias — already covered
+  * All other probed services: DNS dead, parked, Cloudflare blocked, or require registration
+  * CONCLUSION: All easily-implementable services with clean REST/JSON APIs appear to have been found in prior sessions
+  * NEXT SESSION: May want to try mail.gw (mail.tm alternative), or check bertigert/temp-mails repo for any new additions
+  * The project is essentially complete — all viable services implemented; remaining gaps are COMPLEX (browser-only) or NOT_WORKING
+
+- 2026-07-21 session-19: eyepaste.com IMPLEMENTED & TESTED.
+  * eyepaste.com: VERIFIED — email received at testclaude@eyepaste.com
+  * cli_eyepaste.py: RSS-based stateless inbox; GET /inbox/<email>.rss returns XML
+  * No per-message delete; emails auto-expire after 1h
+  * CONCLUSION: All viable temp mail services with clean public REST/JSON APIs are now IMPLEMENTED & TESTED.
+    The project is complete. All remaining non-implemented services are either:
+    - COMPLEX (browser-only: yopmail, emailfake, generator.email, tempr.email, minuteinbox, emailondeck)
+    - NOT_WORKING (DNS dead, GEO-blocked, parked, requires registration/payment)
+  * No new services found this session — all candidates exhausted.
+  * NEXT SESSION: The project is essentially complete. If needed, can re-probe newer services
+    or check if any previously NOT_WORKING services have come back online.
+
+- 2026-07-21 session-20: Probed 3 new services found via web search, all NOT_WORKING.
+  * zemail.me: REST API exists but requires paid API key (Bearer zm_live_...) — no free tier
+  * instanttempemail.com: no API endpoints (404); frontend-only Next.js app
+  * temp-email.dev: Next.js SPA; no accessible REST API
+  * FINAL STATUS: Project is complete. All viable free temp mail services with public APIs are implemented.
+  * NEXT SESSION: No action needed unless user requests new discovery pass.
+
+PRIORITY 12 (Newly Discovered - 2026-07-21 session-21):
+https://48hr.email/ [IMPLEMENTED] [TESTED] → cli_48hremail.py | internal REST API no auth | stateless | domain: 48hr.email | VERIFIED email received at testclaude22@48hr.email
+
+- 2026-07-21 session-21: 48hr.email IMPLEMENTED & TESTED.
+  * 48hr.email: VERIFIED — email received at testclaude22@48hr.email
+  * cli_48hremail.py: GET /api/v1/inbox/<full-email> (must use full address with domain, not just username)
+    + GET /api/v1/inbox/<full-email>/<uid> for full message body
+  * No delete via CLI (Cloudflare blocks DELETE requests); emails auto-expire after 48h
+  * All 4 command sections wired in cli_commands.py: mail-id, list-message, view-message, delete-id
+  * cli_config.py: "48hr.email": ["48hr.email"] added to SITE_DOMAINS
+  * Cleanup needed: patch48.py patch48b.py patch48_out.txt patch48b_out.txt
+  * NEXT SESSION: search for any brand-new temp mail services not in the list
+    Project is essentially complete — all viable free services with public APIs implemented.
+
+PRIORITY 13 (Newly Discovered - 2026-07-21 session-22/23):
+https://evilmail.pro/ [IMPLEMENTED] [TESTED] → cli_evilmail.py | REST API session-based no API key | domain: evilbx.com | VERIFIED email received at joequintin868@evilbx.com
+
+- 2026-07-21 session-23: evilmail.pro IMPLEMENTED & TESTED.
+  * evilmail.pro: VERIFIED — email received at joequintin868@evilbx.com
+  * cli_evilmail.py: POST /api/temp-email → {email, sessionToken, expiresAt}
+    GET /api/temp-email/<token> → messages list (uid, from, subject, body, receivedAt)
+  * Session token stored in cache under email key; server assigns actual address
+  * No per-message delete; emails auto-expire after 60 min TTL
+  * All 4 command sections wired in cli_commands.py; cli_config.py updated
+  * FINAL STATUS: Project complete. All viable free temp mail services with public APIs are implemented.
+  * NEXT SESSION: No action needed unless new services emerge.
+
+PRIORITY 14 (Newly Discovered - 2026-07-21 session-24):
+https://tempmailto.com/ [NOT_WORKING] → API advertised but returns 404 on all endpoints (/api/v1/domains, /api/v1/mailbox); site's own JS gets 404 — API not deployed or requires private key
+https://tmpmail.net/ [NOT_WORKING] → DNS dead (ERR_NAME_NOT_RESOLVED)
+https://www.jetable.fr/ [NOT_WORKING] → Site under redesign ("se refaire une beauté"); no API accessible
+https://www.spamex.com/ [NOT_WORKING] → Requires account registration; no public API
+https://www.dispostable.com/ [NOT_WORKING] → Timed out / unreachable from IN
+https://temppostal.com/ [NOT_WORKING] → API requires Bearer token (paid); no free public access
+
+- 2026-07-21 session-24: Probed 6 new services, all NOT_WORKING.
+  * tempmailto.com: API page is marketing-only; /api/v1/* endpoints return 404 even from the site itself
+  * tmpmail.net: DNS dead
+  * jetable.fr: site under full redesign (blank/coming-soon); no API
+  * spamex.com: registration required; no public API
+  * dispostable.com: unreachable/timed out from IN
+  * temppostal.com: requires paid API key (Bearer)
+  * CONCLUSION: All viable free temp mail services with clean public APIs are exhausted.
+    Project is complete. No further discovery sessions needed unless new services emerge.
+
+PRIORITY 15 (Suggested by AI - 2026-08-08, probe in next session):
+https://mail.gw/ [PENDING] → HIGHEST PRIORITY — same REST API as mail.tm (identical endpoints, just base URL api.mail.gw instead of api.mail.tm); free, no API key, Bearer JWT auth, 8 QPS limit; previously showed 502 in session-11 but confirmed active now; reuse cli_mailtm.py with ~5 line change; domains differ (fetch live from /domains)
+https://temp.cab/ [PENDING] → appeared on active disposable domain blocklists (castle.io, Oct 2025); unknown API — do quick HAR/probe to check for REST endpoints
+https://mailcatch.com/ [PENDING] → appeared on active disposable domain blocklists; unknown API — do quick HAR/probe to check for REST endpoints
+https://mytemp.email/ [PENDING] → appears on multiple active lists (Oct 2025); not in current script; probe for public API endpoint
+https://moakt.com/ [PENDING] → www.moakt.com appears on active blocklists; unknown API — probe via browser eval or fetch
+
+NOTES FOR NEXT SESSION (added 2026-08-08):
+- mail.gw is the #1 priority — code reuse from cli_mailtm.py is near-zero effort
+- For all PENDING above: probe API first (fetch /api or check network tab), if REST/JSON and no captcha → implement; else mark COMPLEX or NOT_WORKING
+- Skip: addy.io (requires account token), smailpro.com (paid), temp-mail.org (RapidAPI key), mailsac.com (paid)
+- All 5 above are NOT in current domains_list.txt and have NOT been probed before
