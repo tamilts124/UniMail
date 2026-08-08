@@ -360,3 +360,85 @@ NOTES FOR NEXT SESSION (added 2026-08-08):
 - For all PENDING: open browser devtools network tab → fetch /api, /v1, /graphql, or watch XHR calls on page load
 - GEO note: some services may block IN IPs — test with proxy if needed
 - Domain count reference source: deviceandbrowserinfo.com/data/emails/providers (checked 2026-08-08)
+
+PRIORITY 17 (Comprehensive research - 2026-08-08, sourced from bertigert/temp-mails PyPI v2.2.0, May 2025):
+SOURCE: https://pypi.org/project/temp-mails/ — 76 confirmed working sites as of May 2025.
+NOTE: Services already in UniMail are excluded. "unofficial" = scraping; "semi-official" = partial API; "official" = full public API.
+Cross-check everything NOT in current UniMail list before implementing. Use bertigert source code on GitHub as reference for scraping approach.
+
+--- TIER 1: OFFICIAL/SEMI-OFFICIAL API (easiest to implement cleanly) ---
+https://mail.gw/ [PENDING] → official/semi-official; identical API to mail.tm (base: api.mail.gw); HIGHEST PRIORITY — already in P15/P16
+https://inboxes.com/ [PENDING] → semi-official; has documented API; worth probing for clean REST endpoints; domain: inboxes.com
+https://10minemail.com/ [PENDING] → semi-official; probe API endpoints; domain: 10minemail.com; note: different from 10minutemail.com (already done)
+https://trashmail.de/ [PENDING] → semi-official; has partial API (not RapidAPI); probe /api or /v1 endpoints; domain: trashmail.de
+https://mailsac.com/ [PENDING] → semi-official; has API but confirmed requires paid key in session-12 — mark NOT_WORKING unless free tier found
+
+--- TIER 2: UNOFFICIAL BUT CONFIRMED WORKING (scraping, session-based) ---
+https://10minutemail.one/ [PENDING] → unofficial scrape; probe network tab for REST-like endpoints; domain likely: 10minutemail.one
+https://10minutesemail.net/ [PENDING] → unofficial scrape; probe for endpoints; domain: 10minutesemail.net
+https://anonymmail.net/ [PENDING] → unofficial; probe for REST endpoints; domain: anonymmail.net
+https://burnermailbox.com/ [PENDING] → unofficial; probe for REST endpoints; domain: burnermailbox.com (different from burnermail.io)
+https://byom.de/ [PENDING] → unofficial; probe for REST/WebSocket endpoints; supports threading in bertigert lib — may have real-time push
+https://correotemporal.org/ [PENDING] → unofficial; Spanish temp mail; probe for REST endpoints
+https://cryptogmail.com/ [PENDING] → unofficial; probe for REST endpoints; provides Gmail-like addresses
+https://disposablemail.com/ [PENDING] → unofficial; probe for REST endpoints; domain: disposablemail.com
+https://etempmail.com/ [PENDING] → unofficial; probe for REST endpoints; domain: etempmail.com
+https://eztempmail.com/ [PENDING] → unofficial; probe for REST endpoints; domain: eztempmail.com
+https://fumail.co/ [PENDING] → unofficial; probe for REST endpoints; domain: fumail.co
+https://incognitomail.co/ [PENDING] → unofficial; probe for REST endpoints; domain: incognitomail.co
+https://internxt.com/temporary-email [PENDING] → unofficial; bertigert notes it is = mail.tm backend; confirm if same API works with different domain list
+https://mail-temp.com/ [PENDING] → unofficial; probe for REST endpoints; domain: mail-temp.com (different from mail-temp.site)
+https://mail.td/ [PENDING] → unofficial; probe for REST endpoints; domain: mail.td
+https://mailforspam.com/ [PENDING] → unofficial; probe for REST endpoints; domain: mailforspam.com
+https://mailhole.de/ [PENDING] → unofficial; German temp mail; probe for REST endpoints
+https://mailnesia.com/ [PENDING] → unofficial; previously showed DNS dead in session-12 — retry; bertigert confirms it was working May 2025
+https://mailper.com/ [PENDING] → unofficial; probe for REST endpoints; domain: mailper.com
+https://mailtemp.uk/ [PENDING] → unofficial; probe for REST endpoints; domain: mailtemp.uk
+https://mintemail.com/ [PENDING] → unofficial; probe for REST endpoints; domain: mintemail.com; old but active
+https://mostakbile.com/ [PENDING] → unofficial; Bangla/regional temp mail; probe for REST endpoints
+https://noopmail.org/ [PENDING] → previously marked NOT_WORKING in session-17 — bertigert confirms working May 2025; retry probe
+https://priyo.email/ [PENDING] → unofficial; probe for REST endpoints; domain: priyo.email
+https://temp-inbox.com/ [PENDING] → unofficial; probe for REST endpoints; domain: temp-inbox.com (different from temp-inbox.me which is CAP/CF)
+https://temp-mail.gg/ [PENDING] → previously marked NOT_WORKING (requires account) — bertigert confirms working May 2025; retry probe
+https://temp-mail.id/ [PENDING] → unofficial; probe for REST endpoints; domain: temp-mail.id; Indonesian service
+https://tempail.com/ [PENDING] → unofficial; probe for REST endpoints; domain: tempail.com
+https://tempemail.co/ [PENDING] → unofficial; probe for REST endpoints (different from tempemail.cc already in UniMail)
+https://tempemailfree.com/ [PENDING] → unofficial; probe for REST endpoints; domain: tempemailfree.com
+https://tempinbox.xyz/ [PENDING] → unofficial; probe for REST endpoints; domain: tempinbox.xyz
+https://tempm.com/ [PENDING] → unofficial; probe for REST endpoints; domain: tempm.com; appeared on castle.io blocklist
+https://tempmail.cc/ [PENDING] → unofficial; probe for REST endpoints (different from tempemail.cc in UniMail)
+https://tempmail.email/ [PENDING] → unofficial; bertigert notes it is = mail.tm backend; confirm if same API works
+https://tempmailbox.net/ [PENDING] → unofficial; probe for REST endpoints
+https://tempomail.top/ [PENDING] → unofficial; probe for REST endpoints; domain: tempomail.top
+https://temporarymail.com/ [PENDING] → unofficial; probe for REST endpoints; domain: temporarymail.com
+https://tm-mail.com/ [PENDING] → unofficial; probe for REST endpoints; domain: tm-mail.com
+https://tmail.gg/ [PENDING] → unofficial; probe for REST endpoints; domain: tmail.gg (different from tmail.io already in P16)
+https://tmpmail.co/ [PENDING] → unofficial; already in P16; bertigert confirms working
+https://txen.de/ [PENDING] → unofficial; probe for REST endpoints; domain: txen.de; already in P16
+https://trashmail.ws/ [PENDING] → unofficial; probe for REST endpoints; already in P16
+
+--- TIER 3: CONFIRMED DEAD/BROKEN by bertigert (skip unless site recovers) ---
+https://1secmail.com/ → OFF (confirmed down in bertigert May 2025, matches our GEO-BLOCK finding)
+https://mail7.io/ → OFF (site completely down)
+https://mailcatch.com/ → NE (receives no emails — skip, already in P15 as PENDING but now de-prioritised)
+https://getnada.cc/ → NE/OFF (= email-free.online which is also OFF)
+https://rainmail.xyz/ → NE per bertigert (matches our NOT_WORKING finding)
+https://noopmail.org/ → retry (was NE before, bertigert shows it working — worth one more probe)
+
+--- SITES BERTIGERT WON'T ADD (permanently skip) ---
+https://smailpro.com/ → captcha + RapidAPI (paid)
+https://emailnator.com/ → captcha/CF + RapidAPI
+https://dispostable.com/ → captcha (matches our session-24 finding: unreachable)
+https://tempmail.quest/ → captcha/CF
+https://tempumail.com/ → captcha
+https://emailsilo.net/ → captcha
+https://tempmailo.com/ → captcha/CF (already in UniMail but API-only, not scraping)
+https://mytemp-mail.com/ → captcha
+
+IMPLEMENTATION NOTES FOR NEXT SESSION (2026-08-08):
+- Reference: pip install temp-mails (github.com/bertigert/temp-mails) — read source code for each service before probing
+- Probe order suggestion: mail.gw → internxt.com → tempmail.email (both likely mail.tm clones = zero code) → inboxes.com → 10minemail.com → byom.de → mail.td → mailnesia.com (retry) → mailhole.de → tempm.com → tempail.com → tempemail.co
+- mail.tm clones (internxt, tempmail.email): just add new domain to existing cli_mailtm.py — may not even need new CLI file
+- For unofficial/scrape services: inspect bertigert source, replicate the session logic in curl_cffi style (same as cli_mohmal.py approach)
+- GEO note: test all new services — some may be blocked from IN like 1secmail.com
+- Total new candidates this session: ~40 services across Tier 1-2
