@@ -1,0 +1,24 @@
+{
+  "domain": "mailditch.com",
+  "status": "HAR_CAPTURED",
+  "captured_at": "2026-07-19",
+  "protocol_type": "Laravel CSRF (same pattern as tempmailq.com)",
+  "base_url": "https://mailditch.com",
+  "domains": ["ditch.my.id", "and others (masked in UI as p***a.my.id, m****d.my.id, h****e.online)"],
+  "csrf_mechanism": {
+    "type": "dual_csrf",
+    "xsrf_cookie": "XSRF-TOKEN cookie present",
+    "meta_token": "<meta name=\"csrf-token\"> present in HTML"
+  },
+  "captcha": {
+    "type": "none detected",
+    "note": "Google Analytics present but no blocking captcha detected."
+  },
+  "endpoints": {
+    "get_messages": {"method": "POST", "path": "/get_messages", "description": "Poll inbox"},
+    "change": {"method": "POST", "path": "/change", "description": "Change email"},
+    "delete": {"method": "POST", "path": "/delete", "description": "Delete mailbox"},
+    "get_message_body": {"method": "GET", "path": "/msg/{id}", "description": "Full message body"}
+  },
+  "notes": "Redirected from /en to /. Same Laravel pattern. Confirmed email generated: yzi36@ditch.my.id. UI masks some domain names with asterisks (likely requires interaction to reveal all). Can reuse _tmq_* logic."
+}

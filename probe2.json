@@ -1,0 +1,68 @@
+{
+  "catchmail_root": {
+    "status": 200,
+    "ct": "text/html; charset=utf-8",
+    "body": "<!DOCTYPE html><html lang=\"en\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/e4af272ccee01ff0-s.p.woff2\" as=\"font\" crossorigin=\"\" type=\"font/woff2\"/><link rel=\"stylesheet\" href=\"/_next/static/css/7dd36ffeeeef3938.css\" data-precedence=\"next\"/><link rel=\"preload\" as=\"script\" fetchPriority=\"low\" href=\"/_next/static/chunks/webpack-3bcee69f4a828af0.js\"/><script src=\"/_next/static/chunks/fd9d1056-71557357"
+  },
+  "catchmail_api": {
+    "status": 404,
+    "ct": "text/html; charset=utf-8",
+    "body": "<!DOCTYPE html><html lang=\"en\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/e4af272ccee01ff0-s.p.woff2\" as=\"font\" crossorigin=\"\" type=\"font/woff2\"/><link rel=\"stylesheet\" href=\"/_next/static/css/7dd36ffeeeef3938.css\" data-precedence=\"next\"/><link rel=\"preload\" as=\"script\" fetchPriority=\"low\" href=\"/_next/static/chunks/webpack-3bcee69f4a828af0.js\"/><script src=\"/_next/static/chunks/fd9d1056-71557357"
+  },
+  "catchmail_inbox": {
+    "status": 404,
+    "ct": "application/json",
+    "body": "{\"detail\":\"Not Found\"}"
+  },
+  "getnada_root": {
+    "status": 200,
+    "ct": "text/html; charset=utf-8",
+    "body": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n    <meta charset=\"utf-8\">\n    <title>title</title>\n    <script>\n\n        const inboxes = window.localStorage.getItem('inboxes')\n        if (inboxes) {\n            try {\n                var state_obj = JSON.parse(inboxes)\n            } catch (e) {\n                console.log('not valid json')\n                location.href = `https://inboxes.com`;\n            }\n            fetch('https://inboxes.com/api/v2/legacy/migration', {\n                method: \"POST"
+  },
+  "getnada_api2": {
+    "status": 404,
+    "ct": "application/json; charset=utf-8",
+    "body": "{\"message\":\"Route GET:/api/v1/domains not found\",\"error\":\"Not Found\",\"statusCode\":404}"
+  },
+  "getnada_api3": {
+    "status": 404,
+    "ct": "application/json; charset=utf-8",
+    "body": "{\"message\":\"Route GET:/api/v1/inbox/0/testclaude@nada.email not found\",\"error\":\"Not Found\",\"statusCode\":404}"
+  },
+  "tempmail_io_alt": {
+    "error": "HTTPSConnectionPool(host='api.tempmail.io', port=443): Max retries exceeded with url: /messages/testclaude@tempmail.io (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x000001D2B4A0F890>: Failed to resolve 'api.tempmail.io' ([Errno 11001] getaddrinfo failed)\"))"
+  },
+  "inboxbear": {
+    "error": "HTTPSConnectionPool(host='inboxbear.com', port=443): Max retries exceeded with url: /testclaude (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x000001D2B4A0FE60>: Failed to resolve 'inboxbear.com' ([Errno 11001] getaddrinfo failed)\"))"
+  },
+  "mailtemp_info": {
+    "status": 200,
+    "ct": "text/html; charset=UTF-8",
+    "body": "<html>\n<head>\n<title>mailtemp.info</title>\n<script type=\"text/javascript\" src=\"/js/fingerprint/iife.min.js\"></script>\n<script type=\"text/javascript\">\nvar redirect_link = 'http://mailtemp.info/checkMail/?username=testclaude&domain=mailtemp.info&tr_uuid=20260720-1354-05af-94b4-daca7a4c5d32&';\nlet redirected = false;\n\nfunction redirect(suffix) {\n\tif (redirected) return;\n\tredirected = true;\n\twindow.location.replace(redirect_link + suffix);\n}\n\nconst rdrTimeout = setTimeout(() => redirect('fp=-7'), 30"
+  },
+  "tempail_com": {
+    "status": 403,
+    "ct": "text/html; charset=UTF-8",
+    "body": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-Vri6W16N5tDYcvc3qA5ISh&#39; &#39;unsafe-eval&#39; https://challenges.cloudflare.com; script-s"
+  },
+  "spamgourmet": {
+    "status": 404,
+    "ct": "text/html; charset=iso-8859-1",
+    "body": "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">\n<html><head>\n<title>404 Not Found</title>\n</head><body>\n<h1>Not Found</h1>\n<p>The requested URL was not found on this server.</p>\n<hr>\n<address>Apache/2.4.38 (Debian) Server at www.spamgourmet.com Port 443</address>\n</body></html>\n"
+  },
+  "emailondeck": {
+    "status": 404,
+    "ct": "text/html; charset=iso-8859-1",
+    "body": "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">\n<html><head>\n<title>404 Not Found</title>\n</head><body>\n<h1>Not Found</h1>\n<p>The requested URL was not found on this server.</p>\n</body></html>\n"
+  },
+  "minuteinbox_api": {
+    "status": 200,
+    "ct": "text/html; charset=UTF-8",
+    "body": "<!DOCTYPE html><html lang=\"en\">\n\t<head>\n<link rel=\"canonical\" href=\"https://www.minuteinbox.com/\" /><link rel=\"sitemap\" type=\"application/xml\" title=\"Sitemap\" href=\"https://www.minuteinbox.com/sitemap.xml\" />\n<link rel=\"preconnect\" href=\"https://tpc.googlesyndication.com\"><link rel=\"preconnect\" href=\"https://minuteinbox.b-cdn.net\"><link rel=\"preconnect\" href=\"https://www.google-analytics.com\"><link rel=\"preconnect\" href=\"https://adservice.google.com\">\t<link rel=\"image_src\" type=\"image/png\" href="
+  },
+  "yopmail_json": {
+    "status": 414,
+    "ct": "text/html; charset=UTF-8",
+    "body": ""
+  }
+}

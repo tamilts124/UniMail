@@ -1,0 +1,29 @@
+{
+  "site": "fakemail.net",
+  "captured": "2026-07-19",
+  "protocol": "PHP session cookie + X-Requested-With: XMLHttpRequest header",
+  "base": "https://www.fakemail.net",
+  "domain": "forliion.com",
+  "session_cookies": ["PHPSESSID"],
+  "email_cookie": "TMA (URL-encoded assigned email address)",
+  "csrf": "embedded in page HTML as const CSRF=\"...\"",
+  "endpoints": {
+    "get_index": "GET /index/index?csrf_token=CSRF  X-Requested-With: XMLHttpRequest -> {email, heslo}",
+    "get_lifetime": "GET /index/zivot  X-Requested-With: XMLHttpRequest -> {ted, konec}",
+    "list_messages": "GET /index/refresh  X-Requested-With: XMLHttpRequest -> [] or [{id,od,predmet,predmetZkraceny,kdy,akce,precteno}]",
+    "get_message": "POST /index/email  body: id=<id>  X-Requested-With: XMLHttpRequest -> {predmet, od, id, enc, telo}",
+    "delete_message": "POST /delete-email/<id>  body: id=<id>  X-Requested-With: XMLHttpRequest -> 'ok'",
+    "change_email": "POST /index/new-email/  body: emailInput=<user>&format=json  X-Requested-With: XMLHttpRequest",
+    "check_username": "POST /index/email-check/  body: email=<user>&format=json -> 'ok' or 'err'"
+  },
+  "notes": [
+    "Session created on first visit to /",
+    "PHPSESSID cookie identifies session server-side",
+    "TMA cookie stores current email address (URL-encoded)",
+    "CSRF token in page HTML: const CSRF=\"...\" — must scrape on each session init",
+    "All AJAX endpoints require X-Requested-With: XMLHttpRequest header or they return HTML",
+    "Message body in .telo field (HTML string)",
+    "Message list returns 0 (integer) when inbox empty, or array of messages",
+    "forliion.com is the observed domain — may rotate"
+  ]
+}

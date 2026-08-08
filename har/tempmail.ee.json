@@ -1,0 +1,21 @@
+{
+  "domain": "tempmail.ee",
+  "status": "HAR_CAPTURED",
+  "captured_at": "2026-07-19",
+  "protocol_type": "Custom REST API (Cloudflare Turnstile protected)",
+  "base_url": "https://tempmail.ee",
+  "domains": ["textdiff.net", "and others - need to check domain list"],
+  "captcha": {
+    "type": "Cloudflare Turnstile",
+    "sitekey": "0x4AAAAAADgR-UM8CEhzUQ-5",
+    "note": "Stealth browser may bypass this; otherwise complex"
+  },
+  "endpoints": {
+    "change_mailbox": {"method": "POST", "path": "/api/mailbox/change", "description": "Get/create temp email address"},
+    "get_mails": {"method": "GET", "path": "/api/mails", "description": "List inbox messages"},
+    "check_new": {"method": "GET", "path": "/api/mail/check-new", "description": "Poll for new emails"},
+    "stream": {"method": "GET", "path": "/api/mail/stream", "description": "Server-Sent Events for real-time updates"}
+  },
+  "auth": "Session cookie based (no CSRF token needed for reads, Turnstile for writes)",
+  "notes": "Verified working in Phase 1. Cloudflare Turnstile protection on mailbox change. The SSE stream at /api/mail/stream gives real-time updates. API needs initial POST /api/mailbox/change to get address. Response time ~65s for email delivery. COMPLEX due to Cloudflare Turnstile - mark as COMPLEX unless stealth browser works."
+}

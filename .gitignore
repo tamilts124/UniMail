@@ -12,6 +12,7 @@ __pycache__/
 debug_*.py
 debug_*.txt
 err.txt
+*.txt
 
 # Local cache / state
 .unimail_cache.json

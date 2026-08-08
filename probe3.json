@@ -1,0 +1,58 @@
+{
+  "inboxes_domains": {
+    "status": 404,
+    "ct": "application/json; charset=utf-8",
+    "body": "{\"message\":\"Route GET:/api/v2/domains not found\",\"error\":\"Not Found\",\"statusCode\":404}"
+  },
+  "inboxes_open": {
+    "status": 404,
+    "ct": "application/json; charset=utf-8",
+    "body": "{\"message\":\"Route POST:/api/v2/inbox/open not found\",\"error\":\"Not Found\",\"statusCode\":404}"
+  },
+  "inboxes_root": {
+    "status": 200,
+    "ct": "text/html",
+    "body": "<!DOCTYPE html>\n<html lang=\"en\" class=\"\">\n\n<head>\n\t<meta charset=\"utf-8\" />\n\t<title>Inboxes.com</title>\n\t<meta name=\"description\" content=\"Inboxes - disposable temp email, protect your inbox from spam.\" />\n\t<link rel=\"icon\" href=\"./images/favicon.png\" />\n\t<link rel=\"icon\" type=\"image/svg+xml\" href=\"./images/favicon.svg\" />\n\t<link rel=\"manifest\" href=\"./manifest.json\" />\n\t<link rel=\"manifest\" href=\"./site.webmanifest\" />\n\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n\t<!--link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v3.0.0/dist/cookiec"
+  },
+  "getnada_net_open": {
+    "status": 200,
+    "ct": "application/json",
+    "body": "{\"inboxId\":\"195625\",\"token\":\"eyJhbGciOiJIUzI1NiJ9.eyJzaWQiOjEsInN1YiI6IjE5NTYyNSIsImlzcyI6InRlbXBtYWlsLXYxIiwiYXVkIjoiaW5ib3gtYXBpIiwiaWF0IjoxNzg0NTE5NzI5LCJleHAiOjE3ODQ2MDYxMjl9.aZ2x_dWwYq0Z4B5wXKYBwSmW5rxhsFG7AReWZPe4Xes\",\"activeUntil\":\"2026-07-21T03:55:29.132Z\",\"sessionSeq\":1,\"visibility\":\"public\",\"recipient\":\"testclaude@getnada.net\",\"mailSource\":\"local\"}"
+  },
+  "getnada_net_domains": {
+    "status": 404,
+    "ct": "text/html; charset=utf-8",
+    "body": "<!DOCTYPE html><html lang=\"en\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"stylesheet\" href=\"/_next/static/css/1c4de7af495ca03a.css\" data-precedence=\"next\"/><link rel=\"preload\" as=\"script\" fetchPriority=\"low\" href=\"/_next/static/chunks/webpack-8f351c5c59ffa519.js\"/><script src=\"/_next/static/chunks/4bd1b696-c2f6e0877b6c10aa.js\" async=\"\"></script><script src=\"/_next/static/chunks/3794-dc6730702800bbce.js\" async=\"\"></script><script src=\"/_next/static/chunks/main-app-eced3c195ef474e3.js\" async=\"\"></script><script src=\"/_next/static/"
+  },
+  "getnada_cc_domains": {
+    "status": 200,
+    "ct": "text/html; charset=utf-8",
+    "body": "<!DOCTYPE html><html lang=\"en\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" as=\"image\" imageSrcSet=\"/_next/image?url=%2Fgetnada.png&amp;w=256&amp;q=75 1x, /_next/image?url=%2Fgetnada.png&amp;w=640&amp;q=75 2x\"/><link rel=\"stylesheet\" href=\"/_next/static/css/1c4de7af495ca03a.css\" data-precedence=\"next\"/><link rel=\"preload\" as=\"script\" fetchPriority=\"low\" href=\"/_next/static/chunks/webpack-8f351c5c59ffa519.js\"/><script src=\"/_next/static/chunks/4bd1b696-c2f6e0877b6c10aa.js\" async=\"\"></script><script src=\"/_next/static/chunk"
+  },
+  "getnada_cc_msgs": {
+    "status": 200,
+    "ct": "text/html; charset=utf-8",
+    "body": "<!DOCTYPE html><html lang=\"en\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" as=\"image\" imageSrcSet=\"/_next/image?url=%2Fgetnada.png&amp;w=256&amp;q=75 1x, /_next/image?url=%2Fgetnada.png&amp;w=640&amp;q=75 2x\"/><link rel=\"stylesheet\" href=\"/_next/static/css/1c4de7af495ca03a.css\" data-precedence=\"next\"/><link rel=\"preload\" as=\"script\" fetchPriority=\"low\" href=\"/_next/static/chunks/webpack-8f351c5c59ffa519.js\"/><script src=\"/_next/static/chunks/4bd1b696-c2f6e0877b6c10aa.js\" async=\"\"></script><script src=\"/_next/static/chunk"
+  },
+  "tempmail_org_msgs": {
+    "error": "HTTPSConnectionPool(host='api.temp-mail.org', port=443): Max retries exceeded with url: /request/mail/id/f9146e43caaca1daf485f32178057a57/format/json/ (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x000001871A3EFB30>: Failed to resolve 'api.temp-mail.org' ([Errno 11001] getaddrinfo failed)\"))"
+  },
+  "tempmail_org_domains": {
+    "error": "HTTPSConnectionPool(host='api.temp-mail.org', port=443): Max retries exceeded with url: /request/domains/format/json/ (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x000001871A420440>: Failed to resolve 'api.temp-mail.org' ([Errno 11001] getaddrinfo failed)\"))"
+  },
+  "mailnesia_atom": {
+    "status": 200,
+    "ct": "text/html;charset=UTF-8",
+    "body": "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <!-- Google tag (gtag.js) --><script async src=\"https://www.googletagmanager.com/gtag/js?id=G-9YV891MPK3\"></script><script>window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-9YV891MPK3'); </script>\n    <title>testclaude @ Mailnesia - Anonymous E-Mail In Seconds</title>\n    <meta name=\"language\" content=\"en\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"/css/style-min.css\" />\n    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n  </head>\n  <body>"
+  },
+  "tempr_email_root": {
+    "status": 200,
+    "ct": "text/html; charset=utf-8",
+    "body": "<!DOCTYPE html>\r<html lang=\"de\">\r<head>\r<title>Tempr.email | Wegwerf E-Mail, TrashMail & M\u00fcllmail seit 2004</title>\r<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\r<meta charset=\"UTF-8\">\r<meta name=\"description\" content=\"Sch\u00fctze Dich vor Spam! \u2714 Kostenlos & Anonym \u2714 TrashMails mit Anhang \u2714 Antworten, Weiterleiten & Versenden von E-Mails \u2794 Viele Domains!\" />\r<meta name=\"robots\" content=\"index, follow\" />\r<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0\">\r<meta name=\"twitter:title\" property=\"og:title\" content=\"Tempr.email | Wegwerf E-"
+  },
+  "tempr_email_json": {
+    "status": 404,
+    "ct": "text/html; charset=UTF-8",
+    "body": "File not found.\n"
+  }
+}

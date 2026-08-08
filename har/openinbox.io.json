@@ -1,0 +1,45 @@
+{
+  "domain": "openinbox.io",
+  "status": "HAR_CAPTURED",
+  "captured_at": "2026-07-19",
+  "protocol_type": "REST/JSON no-auth (free tier)",
+  "base_url": "https://openinbox.io",
+  "api_base": "https://api.openinbox.io",
+  "domains": ["inboxly.website"],
+  "auth": {
+    "type": "none",
+    "notes": "Free tier requires no auth. POST /api/inbox returns {id, email}. The id is used for subsequent calls."
+  },
+  "captcha": {
+    "type": "none",
+    "severity": "none",
+    "note": "No CAPTCHA observed. Clean REST API."
+  },
+  "endpoints": {
+    "create_inbox": {
+      "method": "POST",
+      "path": "/api/inbox",
+      "body": "{}",
+      "response": "{\"id\": \"<uuid>\", \"email\": \"user@inboxly.website\"}",
+      "notes": "Returns inbox id and assigned email address. No auth required. Called on page load."
+    },
+    "get_emails": {
+      "method": "GET",
+      "path": "/api/inbox/{id}/emails",
+      "response": "[{\"id\": \"...\", \"from\": \"...\", \"subject\": \"...\", \"receivedAt\": \"...\", \"body\": \"...\", \"html\": \"...\"}]",
+      "notes": "Returns list of emails for the inbox. Polled every 10s."
+    },
+    "get_email": {
+      "method": "GET",
+      "path": "/api/inbox/{id}/emails/{email_id}",
+      "response": "{\"id\": \"...\", \"from\": \"...\", \"subject\": \"...\", \"body\": \"...\", \"html\": \"...\"}",
+      "notes": "Returns full email details including HTML body."
+    },
+    "delete_inbox": {
+      "method": "DELETE",
+      "path": "/api/inbox/{id}",
+      "notes": "Deletes the inbox."
+    }
+  },
+  "notes": "Very clean REST API. Free plan: 1 inbox, 1-hour expiry. Domains: inboxly.website seen in browser capture. The id from POST /api/inbox must be stored to access messages. Implementation: create cli_openinbox.py."
+}

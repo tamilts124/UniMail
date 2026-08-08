@@ -1,0 +1,52 @@
+{
+  "site": "tempforward.com",
+  "captured": "2026-07-19",
+  "base_url": "https://tempforward.com",
+  "api_base": "https://tempforward.com/api/tempmail",
+  "domain": "tempforward.com",
+  "auth": "token-based (opaque token returned in create response, passed as query param)",
+  "notes": "Simple token-based REST API. No auth headers needed. Token is returned on create and used as a query param for all subsequent requests. Token also appears in the URL after redirect: /en/?t=<token>",
+  "endpoints": {
+    "POST /api/tempmail/create": {
+      "body": "{}",
+      "response": {
+        "success": true,
+        "mailbox": {
+          "id": 662622,
+          "address": "michael2024@tempforward.com",
+          "token": "0456c934644ea3c945bfc707564380ee8ae35e3532e3a7a979d47410e8bc6e20",
+          "expires_at": "2026-07-19T23:16:12.614Z",
+          "created_at": "2026-07-19T20:16:12.614Z"
+        }
+      }
+    },
+    "GET /api/tempmail/inbox?token=<token>": {
+      "response": {
+        "mailbox": {
+          "id": 662620,
+          "address": "edward.kim38@tempforward.com",
+          "expiresAt": "2026-07-19T23:15:18.443Z",
+          "timeLeftSeconds": 10745,
+          "createdAt": "2026-07-19T20:15:18.444Z"
+        },
+        "emails": [],
+        "count": 0
+      }
+    },
+    "GET /api/tempmail/email/<id>?token=<token>": {
+      "notes": "Returns full email with html/text body"
+    },
+    "POST /api/tempmail/extend": {
+      "body": {"token": "<token>"},
+      "response": {
+        "success": true,
+        "mailbox": {
+          "id": 662620,
+          "address": "edward.kim38@tempforward.com",
+          "token": "8e599a4dab3ef23fced2564f75b06b0548e9e39c1af5f97f106d568baaa4def5",
+          "expires_at": "2026-07-20T02:15:18.443Z"
+        }
+      }
+    }
+  }
+}

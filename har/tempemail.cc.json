@@ -1,0 +1,47 @@
+{
+  "site": "tempemail.cc",
+  "captured": "2026-07-19",
+  "base_url": "https://www.tempemail.cc",
+  "api_base": "https://www.tempemail.cc/api",
+  "domain": "icmans.com",
+  "auth": "Bearer JWT (stored in localStorage 'account.token')",
+  "notes": "Nearly identical to mail.tm pattern. Server-assigned password on account creation. Token included in create response.",
+  "endpoints": {
+    "GET /api/domains": {
+      "response": {"code": 200, "message": "success", "data": ["icmans.com"]}
+    },
+    "POST /api/accounts": {
+      "body": {"address": "user@icmans.com", "password": "optional_or_omit"},
+      "response_success": {"code": 200, "message": "success", "data": {"id": "...", "email": "user@icmans.com", "password": "Server1234!", "token": "eyJ...", "name": "user@icmans.com", "quota": 102400, "used": 0, "createdAt": 1784469765}},
+      "response_rate_limit": {"code": 429, "message": "Too many registration attempts. Please try again later!"},
+      "response_error": {"code": 500, "message": "create mailbox failed"},
+      "notes": "Server assigns password if not provided. Token is returned directly — no need for separate /token call after create."
+    },
+    "POST /api/token": {
+      "body": {"email": "user@icmans.com", "password": "Server1234!"},
+      "response": {"code": 200, "message": "success", "data": {"token": "eyJ..."}}
+    },
+    "GET /api/me": {
+      "headers": {"Authorization": "Bearer eyJ..."},
+      "response": {"code": 200, "message": "success", "data": {"id": "204719639828107264", "ownerId": "...", "status": 1, "type": 0, "name": "maloy401@icmans.com", "count": 0, "quota": 102400, "used": 0, "expiresAt": 0, "mailboxType": 0}}
+    },
+    "GET /api/messages?limit=10": {
+      "headers": {"Authorization": "Bearer eyJ..."},
+      "response": {"code": 200, "message": "success", "data": {"items": [], "pagination": {"nextCursor": null, "limit": 10}}}
+    },
+    "GET /api/messages/<id>": {
+      "headers": {"Authorization": "Bearer eyJ..."},
+      "response_not_found": {"code": 400, "message": "Invalid message ID"}
+    },
+    "DELETE /api/messages/<id>": {
+      "headers": {"Authorization": "Bearer eyJ..."},
+      "response_not_found": {"code": 400, "message": "Invalid message ID"},
+      "response_success": {"code": 200, "message": "success"}
+    }
+  },
+  "mercure_sse": "/.well-known/mercure?topic=/u/<accountId>",
+  "localStorage_schema": {
+    "account": "{id, email, password, token, name, quota, used, createdAt}",
+    "accounts": "[{id, email, password}]"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "domain": "zhimail.xyz",
+  "status": "HAR_CAPTURED",
+  "captured_at": "2026-07-19",
+  "protocol_type": "Laravel CSRF (IDENTICAL to tempmailq.com)",
+  "base_url": "https://zhimail.xyz",
+  "domains": ["zhimail.xyz", "zhimail.in", "zhimails.work", "zhimails.vip"],
+  "csrf_mechanism": {
+    "type": "dual_csrf",
+    "xsrf_cookie": "XSRF-TOKEN (read from cookie, URL-decoded, sent as x-xsrf-token header)",
+    "meta_token": "scraped from <meta name=\"csrf-token\"> in homepage HTML, sent as _token body field"
+  },
+  "captcha": {
+    "type": "none detected",
+    "note": "No captcha on homepage. curl_cffi impersonation should work fine."
+  },
+  "endpoints": {
+    "get_messages": {"method": "POST", "path": "/get_messages", "description": "Poll inbox messages"},
+    "change": {"method": "POST", "path": "/change", "description": "Change email address, body: {name, domain}"},
+    "delete": {"method": "POST", "path": "/delete", "description": "Delete current mailbox"},
+    "get_message_body": {"method": "GET", "path": "/msg/{id}", "description": "Fetch full message HTML body"}
+  },
+  "notes": "Confirmed 100% identical to tempmailq.com Laravel pattern. Same endpoints, same CSRF mechanism. Can reuse existing _tmq_* logic with just a different BASE_URL. Multiple domains available."
+}

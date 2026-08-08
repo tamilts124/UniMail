@@ -1,0 +1,32 @@
+{
+  "getnada_net_open": {
+    "status": 200,
+    "body": "{\"inboxId\":\"195626\",\"token\":\"eyJhbGciOiJIUzI1NiJ9.eyJzaWQiOjEsInN1YiI6IjE5NTYyNiIsImlzcyI6InRlbXBtYWlsLXYxIiwiYXVkIjoiaW5ib3gtYXBpIiwiaWF0IjoxNzg0NTE5Nzg3LCJleHAiOjE3ODQ2MDYxODd9.CBmzxfvCcpZfixOHpfCpAna_9lbhP3RCpsZAEJ3HMXs\",\"activeUntil\":\"2026-07-21T03:56:27.852Z\",\"sessionSeq\":1,\"visibility\":\"public\",\"recipient\":\"testclaude2@getnada.net\",\"mailSource\":\"local\"}"
+  },
+  "getnada_net_messages": {
+    "status": 404,
+    "ct": "text/html; charset=utf-8",
+    "body": "<!DOCTYPE html><html lang=\"en\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"stylesheet\" href=\"/_next/static/css/1c4de7af495ca03a.css\" data-precedence=\"next\"/><link rel=\"preload\" as=\"script\" fetchPriority=\"low\" href=\"/_next/static/chunks/webpack-8f351c5c59ffa519.js\"/><script src=\"/_next/static/chunks/4bd1b696-c2f6e0877b6c10aa.js\" async=\"\"></script><script src=\"/_next/static/chunks/3794-dc6730702800bbce.js\" async=\"\"></script><script src=\"/_next/static/chunks/main-app-eced3c195ef474e3.js\" async=\"\"></script><script src=\"/_next/static/chunks/app/layout-6ed67e793e0854e0.js\" async=\"\"></script><meta name=\"robots\" content=\"noindex\"/><meta name=\"theme-color\" content=\"#ffffff\"/><title>Getnada \u2013 Free 10-Minute Temporary Email Service</tit"
+  },
+  "getnada_net_domains": {
+    "status": 404,
+    "ct": "text/html; charset=utf-8",
+    "body": "<!DOCTYPE html><html lang=\"en\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"stylesheet\" href=\"/_next/static/css/1c4de7af495ca03a.css\" data-precedence=\"next\"/><link rel=\"preload\" as=\"script\" fetchPriority=\"low\" href=\"/_next/static/chunks/webpack-8f351c5c59ffa519.js\"/><script src=\"/_next/static/chunks/4bd1b696-c2f6e0877b6c10aa.js\" async=\"\"></script><script src=\"/_next/static/chunks/3794-dc6730702800bbce.js\" async=\"\"></script><script src=\"/_next/static/chunks/main-app-eced3c195ef474e3.js\" async=\"\"></script><script src=\"/_next/static/chunks/app/layout-6ed67e793e0854e0.js\" async=\"\"></script><meta name=\"robots\" content=\"noindex\"/><meta name=\"theme-color\" content=\"#ffffff\"/><title>Getnada \u2013 Free 10-Minute Temporary Email Service</tit"
+  },
+  "getnada_net_msgs_noauth": {
+    "status": 404,
+    "ct": "text/html; charset=utf-8",
+    "body": "<!DOCTYPE html><html lang=\"en\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"stylesheet\" href=\"/_next/static/css/1c4de7af495ca03a.css\" data-precedence=\"next\"/><link rel=\"preload\" as=\"script\" fetchPriority=\"low\" href=\"/_next/static/chunks/webpack-8f351c5c59ffa519.js\"/><script src=\"/_next/static/chunks/4bd1b696-c2f6e0877b6c10aa.js\" async=\"\"></script><script src=\"/_next/static/chunks/3794-dc6730702800bbce.js\" async=\"\"></script><script src=\"/_next/static/chunks/main-app-eced3c195ef474e3.js\" async=\"\"></script><script src=\"/_next/static/chunks/app/layout-6ed67e793e0854e0.js\" async=\"\"></script><meta name=\"robots\" content=\"noindex\"/><meta name=\"theme-color\" content=\"#ffffff\"/><title>Getnada \u2013 Free 10-Minute Temporary Email Service</tit"
+  },
+  "getnada_net_msgs2": {
+    "status": 404,
+    "ct": "text/html; charset=utf-8",
+    "body": "<!DOCTYPE html><html lang=\"en\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"stylesheet\" href=\"/_next/static/css/1c4de7af495ca03a.css\" data-precedence=\"next\"/><link rel=\"preload\" as=\"script\" fetchPriority=\"low\" href=\"/_next/static/chunks/webpack-8f351c5c59ffa519.js\"/><script src=\"/_next/static/chunks/4bd1b696-c2f6e0877b6c10aa.js\" async=\"\"></script><script src=\"/_next/static/chunks/3794-dc6730702800bbce.js\" async=\"\"></script><script src=\"/_next/static/chunks/main-app-eced3c195ef474e3.js\" async=\"\"></script><script src=\"/_next/static/chunks/app/layout-6ed67e793e0854e0.js\" async=\"\"></script><meta name=\"robots\" content=\"noindex\"/><meta name=\"theme-color\" content=\"#ffffff\"/><title>Getnada \u2013 Free 10-Minute Temporary Email Service</tit"
+  },
+  "token_saved": {
+    "token": "eyJhbGciOiJIUzI1NiJ9.eyJzaWQiOjEsInN1YiI6IjE5NTYyN...",
+    "inbox_id": "195626",
+    "recipient": "testclaude2@getnada.net",
+    "activeUntil": "2026-07-21T03:56:27.852Z"
+  }
+}

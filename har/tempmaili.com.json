@@ -1,0 +1,24 @@
+{
+  "domain": "tempmaili.com",
+  "status": "HAR_CAPTURED",
+  "captured_at": "2026-07-19",
+  "protocol_type": "Laravel CSRF (same pattern as tempmailq.com)",
+  "base_url": "https://tempmaili.com",
+  "domains": ["munik.edu.pl"],
+  "csrf_mechanism": {
+    "type": "dual_csrf",
+    "xsrf_cookie": "XSRF-TOKEN cookie",
+    "meta_token": "<meta name=\"csrf-token\"> in HTML"
+  },
+  "captcha": {
+    "type": "Google AdSense present, no blocking captcha",
+    "note": "No captcha blocking API access. curl_cffi should work."
+  },
+  "endpoints": {
+    "get_messages": {"method": "POST", "path": "/get_messages", "description": "Poll inbox"},
+    "change": {"method": "POST", "path": "/change", "description": "Change email"},
+    "delete": {"method": "POST", "path": "/delete", "description": "Delete mailbox"},
+    "get_message_body": {"method": "GET", "path": "/msg/{id}", "description": "Full message body"}
+  },
+  "notes": "EDU-themed temp mail. Confirmed domain munik.edu.pl. Note: URL mentions /index.php/ru suggesting PHP backend possibly but the page looks same as Laravel. Need to confirm if /index.php prefix needed. Confirmed email: eut91@munik.edu.pl. Same _tmq_ reuse possible."
+}

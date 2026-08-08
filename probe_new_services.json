@@ -1,0 +1,45 @@
+{
+  "tempmail_lol_create": {
+    "status": 403,
+    "ct": "application/json",
+    "body": "{\"error\":\"The country you are requesting from (IN) is not allowed to use the API free tier due to consistent API abuse.  If you have TempMail Plus or Ultra, you may bypass this restriction.\",\"captcha_required\":true}"
+  },
+  "getnada_inbox": {
+    "status": 404,
+    "ct": "application/json; charset=utf-8",
+    "body": "{\"message\":\"Route GET:/api/v1/inboxes/testclaude not found\",\"error\":\"Not Found\",\"statusCode\":404}"
+  },
+  "catchmail_io": {
+    "status": 404,
+    "ct": "application/json",
+    "body": "{\"detail\":\"Not Found\"}"
+  },
+  "mohmal_json": {
+    "status": 404,
+    "ct": "text/html; charset=utf-8",
+    "body": "Page not found, 404"
+  },
+  "mohmal_page": {
+    "status": 404,
+    "ct": "text/html; charset=utf-8",
+    "body": "Page not found, 404"
+  },
+  "discard_email": {
+    "status": 200,
+    "ct": "text/html; charset=utf-8",
+    "body": "<!DOCTYPE html>\r<html lang=\"de\">\r<head>\r<title>Tempr.email | Wegwerf E-Mail, TrashMail & M\u00fcllmail seit 2004</title>\r<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\r<meta charset=\"UTF-8\">\r<meta name=\"description\" content=\"Sch\u00fctze Dich vor Spam! \u2714 Kostenlos & Anonym \u2714 TrashMails mit Anhang \u2714 Antworten, Weiterleiten & Versenden von E-Mails \u2794 Viele Domains!\" />\r<meta name=\"robots\" content=\"index"
+  },
+  "mailnesia_rss": {
+    "status": 200,
+    "ct": "text/html;charset=UTF-8",
+    "body": "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <!-- Google tag (gtag.js) --><script async src=\"https://www.googletagmanager.com/gtag/js?id=G-9YV891MPK3\"></script><script>window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-9YV891MPK3'); </script>\n    <title>testclaude @ Mailnesia - Anonymous E-Mail In Seconds</title>\n    <m"
+  },
+  "trashmail_get": {
+    "status": 200,
+    "ct": "text/html; charset=UTF-8",
+    "body": "<!DOCTYPE html>\n<html lang=\"en\" class=\"h-full\">\n<head>\n    <meta charset=\"utf-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    \n    <!-- Title: Wichtige Keywords + Branding -->\n    <title>Aionda Mail - Quantum-Secure Email &amp; Groupware from Germany</title>\n    \n    <!-- Meta-Description: Max. 160 Zeichen f\u00fcr Google-Snippet -->\n    <meta name=\"description\" content"
+  },
+  "dispostable": {
+    "error": "HTTPSConnectionPool(host='www.dispostable.com', port=443): Max retries exceeded with url: /api/inbox/?recipient=testclaude&domain=dispostable.com (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x00000173EC55C980>, 'Connection to www.dispostable.com timed out. (connect timeout=15)'))"
+  }
+}

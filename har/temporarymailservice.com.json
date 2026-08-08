@@ -1,0 +1,26 @@
+{
+  "domain": "temporarymailservice.com",
+  "status": "HAR_CAPTURED",
+  "captured_at": "2026-07-19",
+  "protocol_type": "Laravel CSRF",
+  "base_url": "https://temporarymailservice.com",
+  "domains": ["tomail.fyi"],
+  "csrf_mechanism": {
+    "type": "dual_csrf",
+    "xsrf_cookie": "XSRF-TOKEN (read from cookie, URL-decoded, sent as x-xsrf-token header)",
+    "meta_token": "scraped from <meta name=\"csrf-token\" content=\"...\"> in homepage HTML, sent as _token body field"
+  },
+  "captcha": {
+    "type": "Google reCAPTCHA v2 invisible",
+    "sitekey": "6LcIs84sAAAAAPYcKCQYZ-y0p3LpauiO4fg0PGaD",
+    "captcha_response_field": "captcha-response (hidden input)",
+    "note": "Captcha response is included in POST body, but the site seems to use it loosely - may work without it via curl_cffi impersonation"
+  },
+  "endpoints": {
+    "get_messages": {"method": "POST", "path": "/get_messages", "description": "Poll inbox messages, returns mailbox+messages"},
+    "change": {"method": "POST", "path": "/change", "description": "Change email address, body: {name, domain}"},
+    "delete": {"method": "POST", "path": "/delete", "description": "Delete current mailbox"},
+    "get_message_body": {"method": "GET", "path": "/msg/{id}", "description": "Fetch full message HTML body"}
+  },
+  "notes": "IDENTICAL to tempmailq.com Laravel pattern. Same dual-CSRF mechanism. Can reuse cli_tmq.py/_tmq_get_session logic. Domain: tomail.fyi. Has recaptcha but curl_cffi impersonation should bypass fingerprinting."
+}

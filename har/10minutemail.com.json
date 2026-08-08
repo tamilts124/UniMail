@@ -1,0 +1,68 @@
+{
+  "domain": "10minutemail.com",
+  "status": "HAR_CAPTURED",
+  "captured_at": "2026-07-19",
+  "protocol_type": "REST/JSON cookie-session",
+  "base_url": "https://10minutemail.com",
+  "domains": ["vtmpj.com"],
+  "auth": {
+    "type": "cookie_session",
+    "cookie_name": "JSESSIONID",
+    "notes": "Cookie set by server on first GET /. Also uses Cloudflare (cf_clearance). No API key. No CSRF. curl_cffi with chrome impersonation should pass Cloudflare."
+  },
+  "captcha": {
+    "type": "Cloudflare",
+    "severity": "low",
+    "note": "cf_clearance cookie present. curl_cffi with chrome124 impersonation typically bypasses Cloudflare JS challenge. No interactive CAPTCHA observed."
+  },
+  "endpoints": {
+    "get_address": {
+      "method": "GET",
+      "path": "/session/address",
+      "response": "{\"address\": \"user@domain.com\"}",
+      "notes": "Returns the current session email address. Called on page load."
+    },
+    "get_seconds_left": {
+      "method": "GET",
+      "path": "/session/secondsLeft",
+      "response": "{\"secondsLeft\": 580}",
+      "notes": "Returns time remaining in seconds. Polled every 30s."
+    },
+    "reset_session": {
+      "method": "GET",
+      "path": "/session/reset",
+      "response": "HTTP 200 OK (body empty or ignored)",
+      "notes": "Adds 10 more minutes to the session. GET only."
+    },
+    "expired": {
+      "method": "GET",
+      "path": "/session/expired",
+      "notes": "Called by client when timer hits 0. No-op for our purposes."
+    },
+    "message_count": {
+      "method": "GET",
+      "path": "/messages/messageCount",
+      "response": "{\"messageCount\": 2}",
+      "notes": "Polled every 10 seconds."
+    },
+    "get_messages": {
+      "method": "GET",
+      "path": "/messages/messagesAfter/{index}",
+      "response": "[{\"id\": 1, \"sender\": \"from@example.com\", \"subject\": \"Hello\", \"sentDateFormatted\": \"July 19, 2026 8:30 AM\", \"bodyPlainText\": \"...\", \"bodyHtmlContent\": \"<p>...</p>\"}]",
+      "notes": "index is 0-based message count offset. Returns array of new messages since that index. All messages returned on first call with index=0."
+    },
+    "reply": {
+      "method": "POST",
+      "path": "/messages/reply",
+      "body": "{\"Reply\": {\"messageId\": 1, \"replyBody\": \"...\"}}",
+      "notes": "Reply to a message by id."
+    },
+    "forward": {
+      "method": "POST",
+      "path": "/messages/forward",
+      "body": "{\"Forward\": {\"messageId\": 1, \"forwardAddress\": \"real@email.com\"}}",
+      "notes": "Forward a message to another address."
+    }
+  },
+  "notes": "Clean REST API with PHP cookie session. The email address and domain are assigned by the server on first GET /. We cannot choose the address — only use what the server gives. Multiple domains available (vtmpj.com seen, likely more). Implementation: create cli_10mm.py, cookie session restored from cache."
+}

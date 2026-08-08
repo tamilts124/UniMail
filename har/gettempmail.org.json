@@ -1,0 +1,6 @@
+{
+  "domain": "gettempmail.org",
+  "status": "NOT_WORKING",
+  "captured_at": "2026-07-19",
+  "notes": "DNS not resolving (net::ERR_NAME_NOT_RESOLVED). Domain is dead."
+}
