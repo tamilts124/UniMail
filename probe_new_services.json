@@ -40,6 +40,6 @@
     "body": "<!DOCTYPE html>\n<html lang=\"en\" class=\"h-full\">\n<head>\n    <meta charset=\"utf-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    \n    <!-- Title: Wichtige Keywords + Branding -->\n    <title>Aionda Mail - Quantum-Secure Email &amp; Groupware from Germany</title>\n    \n    <!-- Meta-Description: Max. 160 Zeichen f\u00fcr Google-Snippet -->\n    <meta name=\"description\" content"
   },
   "dispostable": {
-    "error": "HTTPSConnectionPool(host='www.dispostable.com', port=443): Max retries exceeded with url: /api/inbox/?recipient=testclaude&domain=dispostable.com (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x00000173EC55C980>, 'Connection to www.dispostable.com timed out. (connect timeout=15)'))"
+    "error": "HTTPSConnectionPool(host='www.dispostable.com', port=443): Max retries exceeded with url: /api/inbox/?recipient=testclaude&domain=dispostable.com (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x000001496133CD10>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))"
   }
 }

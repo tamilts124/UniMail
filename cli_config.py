@@ -224,9 +224,16 @@ SITE_DOMAINS = {
     "evilmail.pro": [
         "evilbx.com",
     ],
+
+    # -- mail.gw -- identical API to mail.tm (api.mail.gw) ------------------
+    # Same endpoints: GET /domains, POST /accounts, POST /token, GET /messages,
+    # GET /messages/{id}, DELETE /messages/{id}, DELETE /accounts/{id}
+    # AUTH: Bearer JWT. Rate limit: 8 QPS per IP.
+    # Domains fetched live from /domains; seed list here for offline use.
+    "mail.gw": [
+        "oakon.com", "teihu.com", "raleigh-construction.com", "pastryofistanbul.com",
+    ],
 }
-
-
 
 
 
@@ -294,8 +301,8 @@ MOHMAL_BASE = "https://www.mohmal.com"
 DROPMAIL_BASE = "https://dropmail.me"
 # evilmail.pro REST API (session-based token, no API key needed)
 EVILMAIL_BASE = "https://evilmail.pro"
-
-
+# mail.gw REST API (identical to mail.tm but different base URL)
+MAILGW_BASE = "https://mail.gw"
 
 # Convenience set: all site names that use the shared Laravel/_tmq_* logic
 LARAVEL_SITES = frozenset({
@@ -303,6 +310,8 @@ LARAVEL_SITES = frozenset({
     "disposableemailgenerator.com",
     "temporarymailservice.com", "zhimail.xyz", "mailditch.com", "tempmaili.com",
 })
+
+
 
 # â”€â”€ ANSI â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 

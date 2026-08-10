@@ -123,6 +123,11 @@ from cli_evilmail import (
     evilmail_create_inbox, evilmail_list_messages,
     EVILMAIL_DOMAIN,
 )
+from cli_mailgw import (
+    mailgw_get_session, mailgw_list_messages, mailgw_get_message,
+    mailgw_delete_account, mailgw_get_domains,
+)
+
 
 
 
@@ -354,6 +359,33 @@ def cmd_mail_id(email_raw: str, cache: dict):
         info("Account ID", account_id)
         print()
         return
+
+    if site == "mail.gw":
+        mb = cache["mailboxes"].get(email_key, {})
+        if mb.get("mailgw_token") and mb.get("mailgw_account_id"):
+            dbg(f"cmd_mail_id: {email_key} found in cache, validating ...")
+            try:
+                mailgw_get_session(email_key, cache)
+                ok("Session restored from cache.")
+                info("Email",      email_key)
+                info("Account ID", mb.get("mailgw_account_id", "(unknown)"))
+                print()
+                return
+            except Exception as e:
+                warn(f"Cache restore failed ({e}), re-creating ...")
+
+        info("Status", "Not in cache — creating account on mail.gw …")
+        try:
+            _, token, account_id = mailgw_get_session(email_key, cache)
+        except RuntimeError as e:
+            err(str(e))
+            sys.exit(1)
+        ok(f"Created: {c('cyan', email_key)}")
+        info("Account ID", account_id)
+        print()
+        return
+
+
 
     if site == "guerrillamail.com":
         mb = cache["mailboxes"].get(email_key, {})
@@ -918,7 +950,50 @@ def cmd_list_message(email_raw: str, cache: dict):
         print()
         return
 
+    if site == "mail.gw":
+        header(f"Messages in {email_key}")
+        try:
+            messages = mailgw_list_messages(email_key, cache)
+        except RuntimeError as e:
+            err(str(e))
+            sys.exit(1)
+
+        normalised = []
+        for m in messages:
+            frm_obj = m.get("from", {})
+            frm = frm_obj.get("name") or frm_obj.get("address") or "unknown"
+            frm_addr = frm_obj.get("address", "")
+            if frm_addr and frm_addr != frm:
+                frm = f"{frm} <{frm_addr}>"
+            normalised.append({
+                "id":      m.get("id", ""),
+                "from":    frm,
+                "subject": m.get("subject") or "(no subject)",
+                "date":    m.get("createdAt", ""),
+                "is_read": m.get("seen", False),
+                "intro":   m.get("intro", ""),
+            })
+
+        cache["mailboxes"].setdefault(email_key, {})["messages"] = normalised
+        save_cache(cache)
+
+        if not normalised:
+            warn("Inbox is empty.")
+            print()
+            return
+
+        print()
+        for i, msg in enumerate(normalised, 1):
+            dot  = c("dim", "○") if msg.get("is_read") else c("yellow", "●")
+            print(f"  {dot} {c('bold', str(i)+'.')} {c('cyan', msg['subject'])}")
+            print(f"       {c('dim','From:')} {msg['from']}   {c('dim', msg['date'])}")
+            print()
+        print(f"  {c('dim', str(len(normalised))+' message(s) total')}")
+        print()
+        return
+
     if site == "guerrillamail.com":
+
         header(f"Messages in {email_key}")
         try:
             messages = guerrilla_list_messages(email_key, cache)
@@ -1882,7 +1957,62 @@ def cmd_view_message(email_raw: str, serial: int, cache: dict):
         print()
         return
 
+    if site == "mail.gw":
+        import textwrap
+        mb       = cache["mailboxes"].get(email_key, {})
+        messages = mb.get("messages", [])
+
+        if not messages:
+            warn(f"No messages in cache for {email_key}. Run --list-message {email_key} first.")
+            sys.exit(1)
+        if serial < 1 or serial > len(messages):
+            err(f"Invalid number. Valid range: 1–{len(messages)}")
+            sys.exit(1)
+
+        msg    = messages[serial - 1]
+        frm    = msg.get("from", "unknown")
+        subj   = msg.get("subject", "(no subject)")
+        date   = msg.get("date", "")
+        msg_id = msg.get("id", "")
+
+        body = ""
+        if msg_id:
+            try:
+                full = mailgw_get_message(email_key, msg_id, cache)
+                body = full.get("html", [None])[0] if full.get("html") else ""
+                if not body:
+                    body = full.get("text", [None])[0] if full.get("text") else ""
+                    if not body:
+                        body = full.get("intro", "")
+            except Exception as e:
+                warn(f"Could not fetch message body ({e})")
+
+        header(f"Message #{serial}  —  {email_key}")
+        info("From",    frm)
+        info("Subject", subj)
+        info("Date",    date)
+        if msg_id: info("ID", msg_id)
+        print()
+        print(c("dim", "─"*60))
+        print()
+
+        if body:
+            for line in _strip_html(body).splitlines():
+                if line.strip():
+                    for w in textwrap.wrap(line, width=72):
+                        print("  " + w)
+                else:
+                    print()
+        else:
+            warn("(No body content)")
+
+        print()
+        print(c("dim", "─"*60))
+        print()
+        return
+
     if site == "guerrillamail.com":
+
         mb       = cache["mailboxes"].get(email_key, {})
         messages = mb.get("messages", [])
         if not messages:
@@ -2783,7 +2913,25 @@ def cmd_delete_id(email_raw: str, cache: dict):
         print()
         return
 
+    if site == "mail.gw":
+        header(f"Delete: {email_key}")
+        if email_key not in cache["mailboxes"]:
+            warn(f"'{email_key}' not found in local cache.")
+            print()
+            return
+        try:
+            mailgw_delete_account(email_key, cache)
+            ok(f"Deleted account on mail.gw and removed from local cache.")
+        except Exception as e:
+            warn(f"Server delete failed ({e}) — removing from local cache anyway.")
+            if email_key in cache["mailboxes"]:
+                del cache["mailboxes"][email_key]
+            save_cache(cache)
+        print()
+        return
+
     if site == "guerrillamail.com":
+
         header(f"Delete: {email_key}")
         guerrilla_delete_account(email_key, cache)
         ok(f"Removed '{email_key}' from local cache.")

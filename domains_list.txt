@@ -224,7 +224,7 @@ https://www.eyepaste.com/ [IMPLEMENTED] [TESTED] -> cli_eyepaste.py | RSS-based 
 https://luxusmail.org/ [NOT_WORKING] -> redirects to tmp.al (503 Coming Soon)
 https://www.fakemailgenerator.com/ [NOT_WORKING] -> uses einrot.com (Mailinator alias)
 https://trashmail.at/ [NOT_WORKING] -> blank site, all API paths 404
-https://mail.gw/ [NOT_WORKING] -> 502 Bad Gateway
+https://mail.gw/ [IMPLEMENTED] [TESTED] → was 502 in session-11; now working — see PRIORITY 15 for details
 https://inboxkitten.com/ [NOT_WORKING] -> HTML-only, requires Mailgun; no public JSON API
 https://zemail.me/ [NOT_WORKING] -> requires paid API key (Bearer zm_live_...); no free public API
 https://instanttempemail.com/ [NOT_WORKING] -> no API paths found (404); frontend-only
@@ -305,7 +305,7 @@ https://temppostal.com/ [NOT_WORKING] → API requires Bearer token (paid); no f
     Project is complete. No further discovery sessions needed unless new services emerge.
 
 PRIORITY 15 (Suggested by AI - 2026-08-08, probe in next session):
-https://mail.gw/ [PENDING] → HIGHEST PRIORITY — same REST API as mail.tm (identical endpoints, just base URL api.mail.gw instead of api.mail.tm); free, no API key, Bearer JWT auth, 8 QPS limit; previously showed 502 in session-11 but confirmed active now; reuse cli_mailtm.py with ~5 line change; domains differ (fetch live from /domains)
+https://mail.gw/ [IMPLEMENTED] [TESTED] → cli_mailgw.py | Bearer JWT REST API identical to mail.tm (base: api.mail.gw) | domains fetched live: oakon.com teihu.com raleigh-construction.com pastryofistanbul.com | VERIFIED email received at testclaude@oakon.com
 https://temp.cab/ [PENDING] → appeared on active disposable domain blocklists (castle.io, Oct 2025); unknown API — do quick HAR/probe to check for REST endpoints
 https://mailcatch.com/ [PENDING] → appeared on active disposable domain blocklists; unknown API — do quick HAR/probe to check for REST endpoints
 https://mytemp.email/ [PENDING] → appears on multiple active lists (Oct 2025); not in current script; probe for public API endpoint
@@ -321,7 +321,7 @@ PRIORITY 16 (Newly Suggested - 2026-08-08, research-based, probe in future sessi
 
 --- HIGH CONFIDENCE (likely easy REST API, worth probing first) ---
 
-https://mail.gw/ [PENDING] → ALREADY IN PRIORITY 15 — identical API to mail.tm (api.mail.gw), confirmed active Python SDK exists on PyPI (MailGw-Temporary-Email), async client on GitHub (Mar 2026) — highest priority, easiest win
+https://mail.gw/ [IMPLEMENTED] [TESTED] → ALREADY IN PRIORITY 15 — implemented in session-25; cli_mailgw.py; VERIFIED working
 https://tmail.io/ [PENDING] → active service, no official public API but temp-mails PyPI lib scrapes it successfully (unofficial); probe network tab for REST endpoints; domain: tmail.io; worth quick HAR capture
 https://tmpmail.co/ [PENDING] → listed in temp-mails PyPI lib as working unofficial scrape; probe for REST endpoints via HAR
 https://temp.cab/ [PENDING] → ALREADY IN PRIORITY 15 — appeared on castle.io active blocklist Oct 2025; probe for REST API
@@ -367,7 +367,7 @@ NOTE: Services already in UniMail are excluded. "unofficial" = scraping; "semi-o
 Cross-check everything NOT in current UniMail list before implementing. Use bertigert source code on GitHub as reference for scraping approach.
 
 --- TIER 1: OFFICIAL/SEMI-OFFICIAL API (easiest to implement cleanly) ---
-https://mail.gw/ [PENDING] → official/semi-official; identical API to mail.tm (base: api.mail.gw); HIGHEST PRIORITY — already in P15/P16
+https://mail.gw/ [IMPLEMENTED] [TESTED] → already in P15 — see PRIORITY 15 for details
 https://inboxes.com/ [PENDING] → semi-official; has documented API; worth probing for clean REST endpoints; domain: inboxes.com
 https://10minemail.com/ [PENDING] → semi-official; probe API endpoints; domain: 10minemail.com; note: different from 10minutemail.com (already done)
 https://trashmail.de/ [PENDING] → semi-official; has partial API (not RapidAPI); probe /api or /v1 endpoints; domain: trashmail.de
@@ -442,3 +442,16 @@ IMPLEMENTATION NOTES FOR NEXT SESSION (2026-08-08):
 - For unofficial/scrape services: inspect bertigert source, replicate the session logic in curl_cffi style (same as cli_mohmal.py approach)
 - GEO note: test all new services — some may be blocked from IN like 1secmail.com
 - Total new candidates this session: ~40 services across Tier 1-2
+
+- 2026-08-10 session-25: mail.gw IMPLEMENTED & TESTED.
+  * mail.gw: VERIFIED — email received at testclaude@oakon.com | cli_mailgw.py
+  * API: Bearer JWT, identical to mail.tm (base: api.mail.gw). Domains fetched live from /domains.
+  * cli_mailgw.py: GET /domains, POST /accounts, POST /token, GET /messages, GET /messages/{id}, DELETE /accounts/{id}
+  * cli_config.py: "mail.gw" added to SITE_DOMAINS with seed domains: oakon.com, teihu.com, raleigh-construction.com, pastryofistanbul.com
+  * All 4 command sections wired in cli_commands.py: mail-id, list-message, view-message, delete-id
+  * NEXT SESSION: probe remaining PENDING services in Priority 15-17:
+    - temp.cab, mailcatch.com, mytemp.email, moakt.com (Priority 15)
+    - tmail.io, tmpmail.co (Priority 16)
+    - internxt.com/temporary-email, tempmail.email (check if mail.tm clones - zero code cost)
+    - mailhole.de, tempm.com, mail.td, tempail.com, tempemail.co (Priority 17 Tier 2)
+    - 10minemail.com, inboxes.com (Priority 17 Tier 1)
